@@ -10,11 +10,21 @@ const Users = () => {
   }
 
   const renderPhrase = (number) => {
-    let phrase
-    number > 1 && number < 5
-      ? (phrase = 'человека тусанут')
-      : (phrase = 'человек тусанет')
-    return `${number} ${phrase} с тобой сегодня`
+    if (number === 0) {
+      return <span className="badge bg-danger">Никто с тобой не тусанет</span>
+    } else if (number > 1 && number < 5) {
+      return (
+        <span className="badge bg-primary">
+          {number} человека тусанут с тобой сегодня
+        </span>
+      )
+    } else {
+      return (
+        <span className="badge bg-primary">
+          {number} человек тусанет с тобой сегодня
+        </span>
+      )
+    }
   }
 
   const renderQualities = (qualities) => {
@@ -53,22 +63,22 @@ const Users = () => {
 
   return (
     <>
-      <h1>
-        <span className="badge bg-primary">{renderPhrase(users.length)}</span>
-      </h1>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Имя</th>
-            <th scope="col">Качества</th>
-            <th scope="col">Профессия</th>
-            <th scope="col">Встретился, раз</th>
-            <th scope="col">Оценка</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>{renderBody()}</tbody>
-      </table>
+      <h1>{renderPhrase(users.length)}</h1>
+      {users.length > 0 && (
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Имя</th>
+              <th scope="col">Качества</th>
+              <th scope="col">Профессия</th>
+              <th scope="col">Встретился, раз</th>
+              <th scope="col">Оценка</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>{renderBody()}</tbody>
+        </table>
+      )}
     </>
   )
 }
