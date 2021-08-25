@@ -10,21 +10,12 @@ const Users = () => {
   }
 
   const renderPhrase = (number) => {
-    if (number === 0) {
-      return <span className="badge bg-danger">Никто с тобой не тусанет</span>
-    } else if (number > 1 && number < 5) {
-      return (
-        <span className="badge bg-primary">
-          {number} человека тусанут с тобой сегодня
-        </span>
-      )
-    } else {
-      return (
-        <span className="badge bg-primary">
-          {number} человек тусанет с тобой сегодня
-        </span>
-      )
-    }
+    // определяем последний символ в числе для больших чисел
+    const lastOne = Number(number.toString().slice(-1))
+    if (number > 4 && number < 15) return 'человек тусанет'
+    if ([2, 3, 4].indexOf(lastOne) >= 0) return 'человека тусанут'
+    if (lastOne === 1) return 'человек тусанет'
+    return 'человек тусанет'
   }
 
   const renderQualities = (qualities) => {
@@ -49,7 +40,7 @@ const Users = () => {
           <td>{user.rate} / 5</td>
           <td>
             <button
-              onClick={(event) => handleDelete(event.target.id)}
+              onClick={() => handleDelete(user._id)}
               className="btn btn-danger"
               id={user._id}
             >
@@ -63,7 +54,15 @@ const Users = () => {
 
   return (
     <>
-      <h1>{renderPhrase(users.length)}</h1>
+      <h2>
+        <span
+          className={'badge bg-' + (users.length > 0 ? 'primary' : 'danger')}
+        >
+          {users.length > 0
+            ? `${users.length} ${renderPhrase(users.length)} с тобой сегодня`
+            : 'Никто с тобой не тусанет'}
+        </span>
+      </h2>
       {users.length > 0 && (
         <table className="table">
           <thead>
