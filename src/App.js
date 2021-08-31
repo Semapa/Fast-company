@@ -4,7 +4,12 @@ import api from './api'
 import SearchStatus from './components/searchStatus'
 
 function App() {
-  const [users, setUsers] = useState(api.users.fetchAll())
+  const [users, setUsers] = useState(() => {
+    return api.users.fetchAll().map((user) => {
+      user.bookMark = false
+      return user
+    })
+  })
 
   const handleDelete = (userId) => {
     setUsers(users.filter((user) => userId !== user._id))
