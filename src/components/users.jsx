@@ -11,30 +11,35 @@ const Users = ({ users: allUsers, ...rest }) => {
   const pageSize = 4
   const [currentPage, setCurrentPage] = useState(1)
   const [professions, setProfession] = useState()
+  const [selectedProf, setSelectedProf] = useState()
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfession(data))
   }, [])
 
-  const handleProfessionSelect = (params) => {
-    console.log(params)
+  const handleProfessionSelect = (item) => {
+    setSelectedProf(item)
   }
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex)
   }
 
+  // Смотрим есть ли фильтр у юзеров, если есть фильтруем массив,
+  // нет возвращаем нефильтрованный массив
+  const filteredUsers = selectedProf
+    ? allUsers.filter((user) => user.profession === selectedProf)
+    : allUsers
   // Разбиваем основной массив c users на части
   // в соответствии с количеством user-ов на одной странице
-  const users = paginate(allUsers, currentPage, pageSize)
+  const users = paginate(filteredUsers, currentPage, pageSize)
   return (
     <>
       {professions && (
         <GroupList
           items={professions}
           onItemSelect={handleProfessionSelect}
-          valueProperty="_id"
-          contentProperty="name"
+          selectedItem={selectedProf}
         />
       )}
 
