@@ -14,7 +14,7 @@ const BookMark = ({ id, status, onToggleBookMark }) => {
 
 BookMark.propTypes = {
   id: PropTypes.string.isRequired,
-  status: PropTypes.bool.isRequired,
+  status: PropTypes.bool,
   onToggleBookMark: PropTypes.func.isRequired
 }
 

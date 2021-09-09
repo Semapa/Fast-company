@@ -1,14 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Users from './components/users'
-import api from './api'
+import Loader from './components/UI/Loader/loader'
+import api from './api/index'
 
 function App() {
-  const [users, setUsers] = useState(() => {
-    return api.users.fetchAll().map((user) => {
-      user.bookMark = false
-      return user
+  const [users, setUsers] = useState()
+  const [loader, setLoader] = useState(true)
+
+  useEffect(() => {
+    api.users.fetchAll().then((data) => {
+      setUsers(data)
+      setLoader(false)
     })
-  })
+  }, [])
 
   const handleDelete = (userId) => {
     setUsers(users.filter((user) => userId !== user._id))
@@ -28,11 +32,15 @@ function App() {
 
   return (
     <>
-      <Users
-        users={users}
-        onDelete={handleDelete}
-        onToggleBookMark={handleToggleBookMark}
-      />
+      {loader ? (
+        <Loader />
+      ) : (
+        <Users
+          users={users}
+          onDelete={handleDelete}
+          onToggleBookMark={handleToggleBookMark}
+        />
+      )}
     </>
   )
 }
