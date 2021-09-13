@@ -13,8 +13,13 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
-    indent: ['error', 2],
-    'space-before-function-paren': ['error', 'never'],
-    quotes: ['error', 'single', { allowTemplateLiterals: true }]
+    // indent: ['error', 2, { outerIIFEBody: 0 }],
+    indent: 'off',
+    'space-before-function-paren': [
+      'error',
+      { anonymous: 'always', named: 'never' }
+    ],
+    quotes: ['error', 'single', { allowTemplateLiterals: true }],
+    'multiline-ternary': ['off']
   }
 }
