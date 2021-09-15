@@ -1,42 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import User from './user'
+import TableHeader from './tableHeader'
 
-const UserTable = ({ users, onSort, currentSort, ...rest }) => {
-  const handleSort = (item) => {
-    // логика для измениния порядка сортировки
-    if (currentSort.iter === item) {
-      onSort({
-        ...currentSort,
-        order: currentSort.order === 'asc' ? 'desc' : 'asc'
-      })
-    } else {
-      onSort({ iter: item, order: 'asc' })
-    }
+const UserTable = ({ users, onSort, selectedSort, ...rest }) => {
+  const columns = {
+    name: { iter: 'name', name: 'Имя' },
+    quolities: { name: 'Качества' },
+    professions: { iter: 'profession.name', name: 'Профессия' },
+    complitedMeetings: { iter: 'completedMeetings', name: 'Встретился, раз' },
+    rate: { iter: 'rate', name: 'Оценка' },
+    bookmark: { iter: 'bookmark', name: 'Избранное' },
+    delete: {}
   }
+
   return (
     <table className="table">
-      <thead>
-        <tr>
-          <th onClick={() => handleSort('name')} scope="col">
-            Имя
-          </th>
-          <th scope="col">Качества</th>
-          <th onClick={() => handleSort('profession.name')} scope="col">
-            Профессия
-          </th>
-          <th onClick={() => handleSort('completedMeetings')} scope="col">
-            Встретился, раз
-          </th>
-          <th onClick={() => handleSort('rate')} scope="col">
-            Оценка
-          </th>
-          <th onClick={() => handleSort('bookmark')} scope="col">
-            Избранное
-          </th>
-          <th></th>
-        </tr>
-      </thead>
+      <TableHeader {...{ onSort, selectedSort, columns }} />
       <tbody>
         {users.map((user) => (
           <User key={user._id} user={user} {...rest} />
@@ -49,7 +29,7 @@ const UserTable = ({ users, onSort, currentSort, ...rest }) => {
 UserTable.propTypes = {
   users: PropTypes.array.isRequired,
   onSort: PropTypes.func.isRequired,
-  currentSort: PropTypes.object.isRequired
+  selectedSort: PropTypes.object.isRequired
 }
 
 export default UserTable
