@@ -42,6 +42,10 @@ const Users = ({ users: allUsers, ...rest }) => {
     setCurrentPage(pageIndex)
   }
 
+  const handleSort = (item) => {
+    console.log(item)
+  }
+
   // Смотрим есть ли фильтр у юзеров, если есть фильтруем массив,
   // нет возвращаем нефильтрованный массив
 
@@ -83,7 +87,7 @@ const Users = ({ users: allUsers, ...rest }) => {
       )}
       <div className="d-flex flex-column">
         <SearchStatus length={count} />
-        {count > 0 && <UserTable users={users} {...rest} />}
+        {count > 0 && <UserTable users={users} onSort={handleSort} {...rest} />}
         <div className="d-flex justify-content-center">
           <Pagination
             itemCount={count}
