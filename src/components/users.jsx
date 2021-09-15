@@ -6,12 +6,14 @@ import SearchStatus from './searchStatus'
 import UserTable from './userTable'
 import { paginate } from '../utils/paginate'
 import api from '../api/index'
+import _ from 'lodash'
 
 const Users = ({ users: allUsers, ...rest }) => {
-  const pageSize = 2
+  const pageSize = 8
   const [currentPage, setCurrentPage] = useState(1)
   const [professions, setProfession] = useState()
   const [selectedProf, setSelectedProf] = useState()
+  const [sortBy, setSortBy] = useState({ iter: 'name', order: 'asc' })
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfession(data))
@@ -43,7 +45,15 @@ const Users = ({ users: allUsers, ...rest }) => {
   }
 
   const handleSort = (item) => {
-    console.log(item)
+    // логика для измениния порядка сортировки
+    if (sortBy.iter === item) {
+      setSortBy((prevState) => ({
+        ...prevState,
+        order: prevState.order === 'asc' ? 'desc' : 'asc'
+      }))
+    } else {
+      setSortBy({ iter: item, order: 'asc' })
+    }
   }
 
   // Смотрим есть ли фильтр у юзеров, если есть фильтруем массив,
@@ -63,9 +73,12 @@ const Users = ({ users: allUsers, ...rest }) => {
     : allUsers
   const count = filteredUsers.length
 
+  // для фильтрации используем lodash
+  const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order])
+
   // Разбиваем основной массив c users на части
   // в соответствии с количеством user-ов на одной странице
-  const users = paginate(filteredUsers, currentPage, pageSize)
+  const users = paginate(sortedUsers, currentPage, pageSize)
 
   const clearFilter = () => {
     setSelectedProf()
