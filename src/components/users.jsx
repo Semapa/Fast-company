@@ -45,15 +45,8 @@ const Users = ({ users: allUsers, ...rest }) => {
   }
 
   const handleSort = (item) => {
-    // логика для измениния порядка сортировки
-    if (sortBy.iter === item) {
-      setSortBy((prevState) => ({
-        ...prevState,
-        order: prevState.order === 'asc' ? 'desc' : 'asc'
-      }))
-    } else {
-      setSortBy({ iter: item, order: 'asc' })
-    }
+    // принимаем объект
+    setSortBy(item)
   }
 
   // Смотрим есть ли фильтр у юзеров, если есть фильтруем массив,
@@ -100,7 +93,14 @@ const Users = ({ users: allUsers, ...rest }) => {
       )}
       <div className="d-flex flex-column">
         <SearchStatus length={count} />
-        {count > 0 && <UserTable users={users} onSort={handleSort} {...rest} />}
+        {count > 0 && (
+          <UserTable
+            users={users}
+            onSort={handleSort}
+            currentSort={sortBy}
+            {...rest}
+          />
+        )}
         <div className="d-flex justify-content-center">
           <Pagination
             itemCount={count}
