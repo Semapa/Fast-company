@@ -13,7 +13,7 @@ const Users = ({ users: allUsers, ...rest }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [professions, setProfession] = useState()
   const [selectedProf, setSelectedProf] = useState()
-  const [sortBy, setSortBy] = useState({ iter: 'name', order: 'asc' })
+  const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfession(data))
@@ -67,7 +67,7 @@ const Users = ({ users: allUsers, ...rest }) => {
   const count = filteredUsers.length
 
   // для фильтрации используем lodash
-  const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order])
+  const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order])
 
   // Разбиваем основной массив c users на части
   // в соответствии с количеством user-ов на одной странице
