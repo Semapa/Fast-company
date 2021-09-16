@@ -13,6 +13,17 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
       onSort({ path: item, order: 'asc' })
     }
   }
+
+  const renderSortArrow = (item) => {
+    const arrow =
+      selectedSort.order === 'asc' ? (
+        <i className="bi bi-caret-down-fill"></i>
+      ) : (
+        <i className="bi bi-caret-up-fill"></i>
+      )
+    return selectedSort.path === item.path ? arrow : null
+  }
+
   return (
     <thead>
       <tr>
@@ -24,9 +35,12 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
                 ? () => handleSort(columns[column].path)
                 : undefined
             }
+            // Если в объекте есть path, значит это заголовок по которому можно делать сортировку
+            // назначаем ему роль кнопки
             {...{ role: columns[column].path && 'button' }}
             scope="col">
             {columns[column].name}
+            {renderSortArrow(columns[column])}
           </th>
         ))}
       </tr>
