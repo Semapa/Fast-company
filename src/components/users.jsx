@@ -31,7 +31,7 @@ const Users = () => {
     setUsers(
       users.filter((user) => {
         if (user._id === id) {
-          user.bookMark = !user.bookMark
+          user.bookmark = !user.bookmark
           return user
         }
         return user
