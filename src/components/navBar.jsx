@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const NavBar = () => {
   return (
-    <ul className="nav">
+    <ul className="nav mx-4">
       <li className="nav-item">
         <Link className="nav-link active" aria-current="page" to="/">
           Main
