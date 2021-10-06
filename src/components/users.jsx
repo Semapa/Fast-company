@@ -4,6 +4,7 @@ import GroupList from './groupList'
 import SearchStatus from './searchStatus'
 import UserTable from './userTable'
 import Loader from './UI/Loader/loader'
+import TextField from './textField'
 import { paginate } from '../utils/paginate'
 import api from '../api/index'
 import _ from 'lodash'
@@ -13,6 +14,7 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [professions, setProfession] = useState()
   const [selectedProf, setSelectedProf] = useState()
+  const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
 
   const [users, setUsers] = useState()
@@ -61,6 +63,7 @@ const Users = () => {
   // }, [])
 
   const handleProfessionSelect = (item) => {
+    setSearch('')
     setSelectedProf(item)
   }
 
@@ -73,6 +76,10 @@ const Users = () => {
     setSortBy(item)
   }
 
+  const handleSearchChange = ({ target }) => {
+    setSelectedProf()
+    setSearch(target.value)
+  }
   // Смотрим есть ли фильтр у юзеров, если есть фильтруем массив,
   // нет возвращаем нефильтрованный массив
 
@@ -83,12 +90,18 @@ const Users = () => {
   //     : allUsers
 
   if (users) {
+    const searchUsers = _.filter(users, (user) => {
+      if (user.name.toLowerCase().includes(search.toLowerCase())) {
+        return user
+      }
+    })
+
     const filteredUsers = selectedProf
       ? users.filter(
           (user) =>
             JSON.stringify(user.profession) === JSON.stringify(selectedProf)
         )
-      : users
+      : searchUsers
     const count = filteredUsers.length
 
     // для фильтрации используем lodash
@@ -119,13 +132,21 @@ const Users = () => {
         <div className="d-flex flex-column">
           <SearchStatus length={count} />
           {count > 0 && (
-            <UserTable
-              users={usersCrop}
-              onSort={handleSort}
-              selectedSort={sortBy}
-              onDelete={handleDelete}
-              onToggleBookMark={handleToggleBookMark}
-            />
+            <>
+              <TextField
+                placeholder="Search"
+                name="search"
+                value={search}
+                onChange={handleSearchChange}
+              />
+              <UserTable
+                users={usersCrop}
+                onSort={handleSort}
+                selectedSort={sortBy}
+                onDelete={handleDelete}
+                onToggleBookMark={handleToggleBookMark}
+              />
+            </>
           )}
           <div className="d-flex justify-content-center">
             <Pagination
