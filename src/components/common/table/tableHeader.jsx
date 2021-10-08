@@ -38,7 +38,8 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
             // Если в объекте есть path, значит это заголовок по которому можно делать сортировку
             // назначаем ему роль кнопки
             {...{ role: columns[column].path && 'button' }}
-            scope="col">
+            scope="col"
+          >
             {columns[column].name}
             {renderSortArrow(columns[column])}
           </th>
