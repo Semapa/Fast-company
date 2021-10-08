@@ -1,17 +1,11 @@
 import React from 'react'
 import { useParams } from 'react-router'
-import NavBar from '../components/navBar'
-import Users from '../components/users'
-import CurrentUser from '../components/currentUser'
+import UserPage from '../components/page/userPage'
+import UsersListPage from '../components/page/usersListPage'
 
-const LayoutUsers = () => {
+const Users = () => {
   const { userId } = useParams()
-  return (
-    <>
-      <NavBar />
-      {userId ? <CurrentUser /> : <Users />}
-    </>
-  )
+  return <>{userId ? <UserPage userId={userId} /> : <UsersListPage />}</>
 }
 
-export default LayoutUsers
+export default Users

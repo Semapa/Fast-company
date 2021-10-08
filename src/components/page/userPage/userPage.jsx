@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router'
-import api from '../api/index'
-import Loader from '../components/UI/Loader/loader'
-import QualitiesList from './qualitiesList'
+import api from '../../../api/index'
+import Loader from '../../ui/loader/loader'
+import Qualities from '../../ui/qualities'
 
-const CurrentUser = () => {
+const User = () => {
   // деструкторизация входящих пропсов через хук
   const { userId } = useParams()
   const [users, setUsers] = useState()
@@ -28,7 +28,7 @@ const CurrentUser = () => {
       <section className="mx-4">
         <h1>{currentUser.name}</h1>
         <h2>Профессия: {currentUser.profession.name}</h2>
-        <QualitiesList qualities={currentUser.qualities} />
+        <Qualities qualities={currentUser.qualities} />
         <p>completedMeetings: {currentUser.completedMeetings} </p>
         <h3>Rate: {currentUser.rate}</h3>
         <button onClick={() => handleBack()}>Все пользователи</button>
@@ -41,4 +41,4 @@ const CurrentUser = () => {
   return <>{users ? <>{renderUsers()}</> : <Loader />}</>
 }
 
-export default CurrentUser
+export default User
