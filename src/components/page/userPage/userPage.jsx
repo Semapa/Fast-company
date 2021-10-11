@@ -17,22 +17,22 @@ const User = () => {
     })
   }, [])
 
-  const handleBack = () => {
-    history.push('/users')
+  const handleChange = (id) => {
+    history.push(`/users/${id}/edit`)
   }
 
   const renderUsers = () => {
     const currentUser = users.find((user) => user._id === userId)
 
     return currentUser ? (
-      <section className="mx-4">
+      <div className="mx-4">
         <h1>{currentUser.name}</h1>
         <h2>Профессия: {currentUser.profession.name}</h2>
         <Qualities qualities={currentUser.qualities} />
         <p>completedMeetings: {currentUser.completedMeetings} </p>
         <h3>Rate: {currentUser.rate}</h3>
-        <button onClick={() => handleBack()}>Все пользователи</button>
-      </section>
+        <button onClick={() => handleChange(currentUser._id)}>Изменить</button>
+      </div>
     ) : (
       <Loader />
     )
