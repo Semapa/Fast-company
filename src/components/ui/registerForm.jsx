@@ -124,12 +124,14 @@ const RegisterForm = () => {
           onChange={handleChange}
           label="Выберите ваш пол"
         />
-        <MultiSelectField
-          options={qualities}
-          onChange={handleChange}
-          name="qualities"
-          label="Выберите ваши качества"
-        />
+        {qualities && (
+          <MultiSelectField
+            options={qualities}
+            onChange={handleChange}
+            name="qualities"
+            label="Выберите ваши качества"
+          />
+        )}
 
         <CheckBoxField
           value={data.license}

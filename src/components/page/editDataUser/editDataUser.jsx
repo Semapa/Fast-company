@@ -44,11 +44,11 @@ const EditDataUser = ({ userId }) => {
   }
 
   useEffect(() => {
+    api.professions.fetchAll().then((data) => setProfession(data))
+    api.qualities.fetchAll().then((data) => setQualities(data))
     api.users.fetchAll().then((data) => {
       setUsers(data)
     })
-    api.professions.fetchAll().then((data) => setProfession(data))
-    api.qualities.fetchAll().then((data) => setQualities(data))
   }, [])
 
   useEffect(() => {
@@ -83,6 +83,7 @@ const EditDataUser = ({ userId }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log('editDataUser - e', e)
+    console.log('handleSubmit - data', data)
   }
 
   const renderFormUser = () => {
@@ -90,7 +91,6 @@ const EditDataUser = ({ userId }) => {
       <div className="container mt-5">
         <div className="row justify-content-center ">
           <div className="col-md-6 ">
-            <h1>Создать</h1>
             <form onSubmit={handleSubmit}>
               <TextField
                 label="Имя"
@@ -131,7 +131,7 @@ const EditDataUser = ({ userId }) => {
                 onChange={handleChange}
                 name="qualities"
                 label="Выберите ваши качества"
-                value={data.qualities}
+                selected={data.qualities}
               />
               <button
                 type="submit"
