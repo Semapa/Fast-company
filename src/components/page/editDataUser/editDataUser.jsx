@@ -4,14 +4,20 @@ import api from '../../../api/index'
 import { validator } from '../../../utils/validator'
 import Loader from '../../ui/loader/loader'
 import TextField from '../../common/form/textField'
+import SelectField from '../../common/form/selectField'
+import RadioField from '../../common/form/radioField'
+import MultiSelectField from '../../common/form/multiSelectField'
 
 const EditDataUser = ({ userId }) => {
   const [users, setUsers] = useState()
+  const [professions, setProfession] = useState([])
+  const [qualities, setQualities] = useState({})
   const [data, setData] = useState({
     name: '',
-    lastName: '',
-    year: '',
-    portfolio: ''
+    email: '',
+    profession: '',
+    sex: '',
+    qualities: []
   })
 
   const [errors, setErrors] = useState({})
@@ -22,26 +28,17 @@ const EditDataUser = ({ userId }) => {
         message: 'Поле "Имя" обязательно для заполнения'
       }
     },
-    lastName: {
+    email: {
       isRequired: {
-        message: 'Поле "Фамилия" обязательно для заполнения'
+        message: 'Электронная почта обязательна для заполнения'
+      },
+      isEmail: {
+        message: 'Email введен не корректно'
       }
     },
-    year: {
+    profession: {
       isRequired: {
-        message: 'Поле "Год рождения" обязателено для заполнения'
-      },
-      length: {
-        message: 'Поле "Год рождения" не корректно',
-        value: 4
-      }
-    },
-    portfolio: {
-      isRequired: {
-        message: 'Поле "Портфолио" обязательно для заполнения'
-      },
-      isUrl: {
-        message: 'Поле "Портфолио" должно быть ссылкой'
+        message: 'Обязательно вберите вашу профессию'
       }
     }
   }
@@ -50,11 +47,27 @@ const EditDataUser = ({ userId }) => {
     api.users.fetchAll().then((data) => {
       setUsers(data)
     })
+    api.professions.fetchAll().then((data) => setProfession(data))
+    api.qualities.fetchAll().then((data) => setQualities(data))
   }, [])
 
   useEffect(() => {
     validate()
   }, [data])
+
+  useEffect(() => {
+    if (users) {
+      const currentUser = users.find((user) => user._id === userId)
+      setData((prevState) => ({
+        ...prevState,
+        name: currentUser.name,
+        email: currentUser.email,
+        profession: currentUser.profession.name,
+        sex: currentUser.sex,
+        qualities: currentUser.qualities
+      }))
+    }
+  }, [users])
 
   const validate = () => {
     const errors = validator(data, validatorConfig)
@@ -63,7 +76,7 @@ const EditDataUser = ({ userId }) => {
   }
   const isValid = Object.keys(errors).length === 0
 
-  const handleChange = ({ target }) => {
+  const handleChange = (target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }))
   }
 
@@ -73,9 +86,6 @@ const EditDataUser = ({ userId }) => {
   }
 
   const renderFormUser = () => {
-    const currentUser = users.find((user) => user._id === userId)
-    console.log('editDatatUser currentUser', currentUser)
-
     return (
       <div className="container mt-5">
         <div className="row justify-content-center ">
@@ -89,12 +99,46 @@ const EditDataUser = ({ userId }) => {
                 error={errors.name}
                 onChange={handleChange}
               ></TextField>
+              <TextField
+                label="Электронная почта"
+                name="email"
+                value={data.email}
+                onChange={handleChange}
+                error={errors.email}
+              />
+
+              <SelectField
+                label="Выбери свою профессию"
+                defaultOption={data.profession}
+                options={professions}
+                onChange={handleChange}
+                value={data.profession}
+                error={errors.profession}
+              />
+              <RadioField
+                options={[
+                  { name: 'Male', value: 'male' },
+                  { name: 'Female', value: 'female' },
+                  { name: 'Other', value: 'other' }
+                ]}
+                value={data.sex}
+                name="sex"
+                onChange={handleChange}
+                label="Выберите ваш пол"
+              />
+              <MultiSelectField
+                options={qualities}
+                onChange={handleChange}
+                name="qualities"
+                label="Выберите ваши качества"
+                value={data.qualities}
+              />
               <button
                 type="submit"
                 className="btn btn-primary"
                 disabled={!isValid}
               >
-                Создать
+                Обновить
               </button>
             </form>
           </div>
