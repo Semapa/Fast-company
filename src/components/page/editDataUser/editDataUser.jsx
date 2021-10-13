@@ -58,14 +58,17 @@ const EditDataUser = ({ userId }) => {
   useEffect(() => {
     if (users) {
       const currentUser = users.find((user) => user._id === userId)
-      setData((prevState) => ({
-        ...prevState,
-        name: currentUser.name,
-        email: currentUser.email,
-        profession: currentUser.profession.name,
-        sex: currentUser.sex,
-        qualities: currentUser.qualities
-      }))
+      console.log('currentUser', currentUser)
+      setData((prevState) => {
+        return {
+          ...prevState,
+          name: currentUser.name,
+          email: currentUser.email,
+          profession: currentUser.profession.name,
+          sex: currentUser.sex,
+          qualities: currentUser.qualities
+        }
+      })
     }
   }, [users])
 
