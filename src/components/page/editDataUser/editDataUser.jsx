@@ -9,7 +9,7 @@ import RadioField from '../../common/form/radioField'
 import MultiSelectField from '../../common/form/multiSelectField'
 
 const EditDataUser = ({ userId }) => {
-  const [users, setUsers] = useState()
+  const [isLoading, setIsLoading] = useState(true)
   const [professions, setProfession] = useState([])
   const [qualities, setQualities] = useState({})
   const [data, setData] = useState({
@@ -46,31 +46,22 @@ const EditDataUser = ({ userId }) => {
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfession(data))
     api.qualities.fetchAll().then((data) => setQualities(data))
-    api.users.fetchAll().then((data) => {
-      setUsers(data)
+    api.users.getById(userId).then((data) => {
+      setData((prevState) => ({
+        ...prevState,
+        name: data.name,
+        email: data.email,
+        profession: data.profession.name,
+        sex: data.sex,
+        qualities: data.qualities
+      }))
+      setIsLoading(false)
     })
   }, [])
 
   useEffect(() => {
     validate()
   }, [data])
-
-  useEffect(() => {
-    if (users) {
-      const currentUser = users.find((user) => user._id === userId)
-      console.log('currentUser', currentUser)
-      setData((prevState) => {
-        return {
-          ...prevState,
-          name: currentUser.name,
-          email: currentUser.email,
-          profession: currentUser.profession.name,
-          sex: currentUser.sex,
-          qualities: currentUser.qualities
-        }
-      })
-    }
-  }, [users])
 
   const validate = () => {
     const errors = validator(data, validatorConfig)
@@ -150,7 +141,7 @@ const EditDataUser = ({ userId }) => {
     )
   }
 
-  return <>{users ? <>{renderFormUser()}</> : <Loader />}</>
+  return <>{isLoading ? <Loader /> : <>{renderFormUser()}</>}</>
 }
 
 EditDataUser.propTypes = {

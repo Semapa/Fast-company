@@ -7,13 +7,15 @@ import Qualities from '../../ui/qualities'
 const User = () => {
   // деструкторизация входящих пропсов через хук
   const { userId } = useParams()
-  const [users, setUsers] = useState()
+  const [user, setUser] = useState()
+  const [isLoading, setIsLoading] = useState(true)
 
   const history = useHistory()
 
   useEffect(() => {
-    api.users.fetchAll().then((data) => {
-      setUsers(data)
+    api.users.getById(userId).then((data) => {
+      setUser(data)
+      setIsLoading(false)
     })
   }, [])
 
@@ -22,23 +24,19 @@ const User = () => {
   }
 
   const renderUsers = () => {
-    const currentUser = users.find((user) => user._id === userId)
-
-    return currentUser ? (
+    return (
       <div className="mx-4">
-        <h1>{currentUser.name}</h1>
-        <h2>Профессия: {currentUser.profession.name}</h2>
-        <Qualities qualities={currentUser.qualities} />
-        <p>completedMeetings: {currentUser.completedMeetings} </p>
-        <h3>Rate: {currentUser.rate}</h3>
-        <button onClick={() => handleChange(currentUser._id)}>Изменить</button>
+        <h1>{user.name}</h1>
+        <h2>Профессия: {user.profession.name}</h2>
+        <Qualities qualities={user.qualities} />
+        <p>completedMeetings: {user.completedMeetings} </p>
+        <h3>Rate: {user.rate}</h3>
+        <button onClick={() => handleChange(user._id)}>Изменить</button>
       </div>
-    ) : (
-      <Loader />
     )
   }
 
-  return <>{users ? <>{renderUsers()}</> : <Loader />}</>
+  return <>{isLoading ? <Loader /> : <>{renderUsers()}</>}</>
 }
 
 export default User

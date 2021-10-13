@@ -2,7 +2,13 @@ import React, { useEffect } from 'react'
 import Select from 'react-select'
 import PropTypes from 'prop-types'
 
-const MultiSelectField = ({ options, onChange, name, label, selected }) => {
+const MultiSelectField = ({
+  options,
+  onChange,
+  name,
+  label,
+  selected = []
+}) => {
   const optionsArray =
     !Array.isArray(options) && typeof options === 'object'
       ? Object.keys(options).map((optionName) => ({
@@ -11,11 +17,21 @@ const MultiSelectField = ({ options, onChange, name, label, selected }) => {
         }))
       : options
 
+  const selectedArray =
+    selected.length !== 0 && selected[0]._id
+      ? selected.map((item) => ({
+          label: item.name,
+          value: item._id
+        }))
+      : selected
+
   useEffect(() => {
     console.log('selected', selected)
+    console.log('selectedArray', selectedArray)
   }, [])
 
   const handleChange = (value) => {
+    console.log('handleChange', value)
     onChange({ name: name, value })
   }
 
@@ -30,6 +46,7 @@ const MultiSelectField = ({ options, onChange, name, label, selected }) => {
         classNamePrefix="select"
         onChange={handleChange}
         name={name}
+        value={selectedArray}
       />
     </div>
   )
