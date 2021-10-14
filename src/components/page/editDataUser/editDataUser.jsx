@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import api from '../../../api/index'
+import { useHistory } from 'react-router'
 import { validator } from '../../../utils/validator'
 import Loader from '../../ui/loader/loader'
 import TextField from '../../common/form/textField'
 import SelectField from '../../common/form/selectField'
 import RadioField from '../../common/form/radioField'
 import MultiSelectField from '../../common/form/multiSelectField'
+import _ from 'lodash'
 
 const EditDataUser = ({ userId }) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -21,6 +23,7 @@ const EditDataUser = ({ userId }) => {
   })
 
   const [errors, setErrors] = useState({})
+  const history = useHistory()
 
   const validatorConfig = {
     name: {
@@ -51,7 +54,7 @@ const EditDataUser = ({ userId }) => {
         ...prevState,
         name: data.name,
         email: data.email,
-        profession: data.profession.name,
+        profession: data.profession._id,
         sex: data.sex,
         qualities: data.qualities
       }))
@@ -76,10 +79,21 @@ const EditDataUser = ({ userId }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('editDataUser - e', e)
-    console.log('handleSubmit - data', data)
+
+    const currentState = _.clone(data)
+
+    Object.keys(professions).map((item) => {
+      if (professions[item]._id === data.profession) {
+        currentState.profession = professions[item]
+      }
+      return 0
+    })
+
+    api.users.update(userId, currentState)
+    history.push(`/users/${userId}`)
   }
 
+  // TODO с задержкой загружается поле профессия Почему???
   const renderFormUser = () => {
     return (
       <div className="container mt-5">
@@ -103,7 +117,7 @@ const EditDataUser = ({ userId }) => {
 
               <SelectField
                 label="Выбери свою профессию"
-                defaultOption={data.profession}
+                // defaultOption=""
                 options={professions}
                 onChange={handleChange}
                 value={data.profession}

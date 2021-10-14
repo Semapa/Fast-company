@@ -140,7 +140,8 @@ const users = [
     completedMeetings: 17,
     rate: 4.5,
     bookmark: false,
-    sex: 'other'
+    sex: 'other',
+    email: 'mail@mail.ru'
   },
   {
     _id: '67rdca3eeb7f6fgeed47181f',

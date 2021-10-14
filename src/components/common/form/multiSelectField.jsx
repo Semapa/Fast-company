@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Select from 'react-select'
 import PropTypes from 'prop-types'
 
@@ -9,6 +9,8 @@ const MultiSelectField = ({
   label,
   selected = []
 }) => {
+  // переформатируем options(все значения списка)
+  // в нужное представление для MultiSelectField
   const optionsArray =
     !Array.isArray(options) && typeof options === 'object'
       ? Object.keys(options).map((optionName) => ({
@@ -16,7 +18,8 @@ const MultiSelectField = ({
           value: options[optionName]._id
         }))
       : options
-
+  // переформатируем selected(выбранные поля списка)
+  // в нужное представление для MultiSelectField
   const selectedArray =
     selected.length !== 0 && selected[0]._id
       ? selected.map((item) => ({
@@ -25,14 +28,17 @@ const MultiSelectField = ({
         }))
       : selected
 
-  useEffect(() => {
-    console.log('selected', selected)
-    console.log('selectedArray', selectedArray)
-  }, [])
-
   const handleChange = (value) => {
-    console.log('handleChange', value)
-    onChange({ name: name, value })
+    const formatQualities = []
+    value.map((qual) => {
+      return Object.keys(options).map((q) => {
+        if (options[q]._id === qual.value || options[q]._id === qual._id) {
+          formatQualities.push(options[q])
+        }
+        return 0
+      })
+    })
+    onChange({ name: name, value: formatQualities })
   }
 
   return (

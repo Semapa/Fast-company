@@ -25,10 +25,6 @@ const RegisterForm = () => {
     api.qualities.fetchAll().then((data) => setQualities(data))
   }, [])
 
-  const handleChange = (target) => {
-    setData((prevState) => ({ ...prevState, [target.name]: target.value }))
-  }
-
   const validatorConfig = {
     email: {
       isRequired: {
@@ -76,6 +72,10 @@ const RegisterForm = () => {
     return Object.keys(errors).length === 0
   }
   const isValid = Object.keys(errors).length === 0
+
+  const handleChange = (target) => {
+    setData((prevState) => ({ ...prevState, [target.name]: target.value }))
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -130,6 +130,7 @@ const RegisterForm = () => {
             onChange={handleChange}
             name="qualities"
             label="Выберите ваши качества"
+            selected={data.qualities}
           />
         )}
 
