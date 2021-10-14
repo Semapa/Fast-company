@@ -25,10 +25,6 @@ const RegisterForm = () => {
     api.qualities.fetchAll().then((data) => setQualities(data))
   }, [])
 
-  const handleChange = (target) => {
-    setData((prevState) => ({ ...prevState, [target.name]: target.value }))
-  }
-
   const validatorConfig = {
     email: {
       isRequired: {
@@ -77,6 +73,10 @@ const RegisterForm = () => {
   }
   const isValid = Object.keys(errors).length === 0
 
+  const handleChange = (target) => {
+    setData((prevState) => ({ ...prevState, [target.name]: target.value }))
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     const isValid = validate()
@@ -124,12 +124,15 @@ const RegisterForm = () => {
           onChange={handleChange}
           label="Выберите ваш пол"
         />
-        <MultiSelectField
-          options={qualities}
-          onChange={handleChange}
-          name="qualities"
-          label="Выберите ваши качества"
-        />
+        {qualities && (
+          <MultiSelectField
+            options={qualities}
+            onChange={handleChange}
+            name="qualities"
+            label="Выберите ваши качества"
+            selected={data.qualities}
+          />
+        )}
 
         <CheckBoxField
           value={data.license}

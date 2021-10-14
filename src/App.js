@@ -10,7 +10,7 @@ function App() {
     <div>
       <NavBar />
       <Switch>
-        <Route path="/users/:userId?" component={LayoutUsers} />
+        <Route path="/users/:userId?/:edit?" component={LayoutUsers} />
         <Route path="/login/:type?" component={Login} />
         <Route path="/" exact component={LayoutMain} />
       </Switch>
