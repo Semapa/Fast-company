@@ -93,13 +93,20 @@ const EditDataUser = ({ userId }) => {
     history.push(`/users/${userId}`)
   }
 
+  const handleBack = () => {
+    history.push(`/users/${userId}`)
+  }
+
   // TODO с задержкой загружается поле профессия Почему???
   const renderFormUser = () => {
     return (
       <div className="container mt-5">
+        <button className="btn btn-primary" onClick={handleBack}>
+          <i className="bi bi-caret-left"></i>Назад
+        </button>
         <div className="row justify-content-center ">
           <div className="col-md-6 ">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="shadow p-4">
               <TextField
                 label="Имя"
                 name="name"
