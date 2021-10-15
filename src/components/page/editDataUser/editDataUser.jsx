@@ -32,9 +32,9 @@ const EditDataUser = ({ userId }) => {
       }
     },
     email: {
-      isRequired: {
-        message: 'Электронная почта обязательна для заполнения'
-      },
+      // isRequired: {
+      //   message: 'Электронная почта обязательна для заполнения'
+      // },
       isEmail: {
         message: 'Email введен не корректно'
       }
@@ -129,6 +129,7 @@ const EditDataUser = ({ userId }) => {
                 onChange={handleChange}
                 value={data.profession}
                 error={errors.profession}
+                name="profession"
               />
               <RadioField
                 options={[

@@ -7,16 +7,17 @@ const SelectField = ({
   onChange,
   defaultOption,
   options,
-  error
+  error,
+  name
 }) => {
   const handleChange = ({ target }) => {
+    console.log('target', target)
     onChange({ name: target.name, value: target.value })
   }
 
   const getInputClasses = () => {
     return 'form-select' + (error ? ' is-invalid' : '')
   }
-
   // если options не массив, а объект, то трансформируем его в массив
   const optionsArray =
     !Array.isArray(options) && typeof options === 'object'
@@ -24,7 +25,10 @@ const SelectField = ({
           name: options[optionName].name,
           value: options[optionName]._id
         }))
-      : options
+      : options.map((option) => ({
+          name: option.name,
+          value: option._id
+        }))
 
   return (
     <div className="mb-4">
@@ -34,7 +38,7 @@ const SelectField = ({
       <select
         className={getInputClasses()}
         id="validationCustom04"
-        name="profession"
+        name={name}
         value={value}
         onChange={handleChange}
       >
@@ -58,7 +62,8 @@ SelectField.propTypes = {
   onChange: PropTypes.func,
   defaultOption: PropTypes.string,
   options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  error: PropTypes.string
+  error: PropTypes.string,
+  name: PropTypes.string
 }
 
 export default SelectField

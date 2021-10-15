@@ -76,7 +76,7 @@ const UsersListPage = () => {
     setSortBy(item)
   }
 
-  const handleSearchChange = ({ target }) => {
+  const handleSearchChange = (target) => {
     setSelectedProf()
     setSearch(target.value)
   }
