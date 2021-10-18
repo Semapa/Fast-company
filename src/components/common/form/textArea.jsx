@@ -2,9 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const TextArea = ({ name, onChange, label, rowCount = '5', error, value }) => {
-  console.log(name)
   const handleChange = ({ target }) => {
-    console.log('target', target)
     onChange({ name: target.name, value: target.value })
   }
 

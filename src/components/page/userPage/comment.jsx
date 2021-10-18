@@ -2,7 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Avatar from '../../common/avatar'
 
-const Comment = ({ comments, getNameUser, getTimeComment, onClick }) => {
+const Comment = ({
+  comments,
+  getNameUser,
+  getTimeComment,
+  handleDeleteComment
+}) => {
   return (
     <>
       {comments.map((comment) => (
@@ -17,14 +22,12 @@ const Comment = ({ comments, getNameUser, getTimeComment, onClick }) => {
                       <p className="mb-1">
                         {getNameUser(comment.userId)}
                         <span className="small">
-                          &nbsp;-&nbsp;
+                          &nbsp;:&nbsp;
                           {getTimeComment(comment.created_at)}
                         </span>
                       </p>
                       <button
-                        onClick={() => {
-                          onClick
-                        }}
+                        onClick={() => handleDeleteComment(comment._id)}
                         className="btn btn-sm text-primary d-flex align-items-center"
                       >
                         <i className="bi bi-x-lg"></i>
@@ -46,7 +49,7 @@ Comment.propTypes = {
   comments: PropTypes.array.isRequired,
   getNameUser: PropTypes.func.isRequired,
   getTimeComment: PropTypes.func.isRequired,
-  onClick: PropTypes.func.isRequired
+  handleDeleteComment: PropTypes.func.isRequired
 }
 
 export default Comment

@@ -3,7 +3,14 @@ import PropTypes from 'prop-types'
 import SelectField from '../../common/form/selectField'
 import TextArea from '../../common/form/textArea'
 
-function NewComment({ users, data, errors, isValid, onChange, onClick }) {
+function NewComment({
+  users,
+  data,
+  errors,
+  isValid,
+  handleChange,
+  handlePublic
+}) {
   return (
     <div className="card mb-2">
       <div className="card-body">
@@ -13,7 +20,7 @@ function NewComment({ users, data, errors, isValid, onChange, onClick }) {
             <SelectField
               defaultOption="Выберете пользователя"
               options={users}
-              onChange={onChange}
+              onChange={handleChange}
               value={data.newCommentUser}
               name="newCommentUser"
               error={errors.newCommentUser}
@@ -22,7 +29,7 @@ function NewComment({ users, data, errors, isValid, onChange, onClick }) {
           <div className="mb-4">
             <TextArea
               name="newCommentMessage"
-              onChange={onChange}
+              onChange={handleChange}
               label="Сообщение"
               rowCount="3"
               value={data.newCommentMessage}
@@ -31,7 +38,7 @@ function NewComment({ users, data, errors, isValid, onChange, onClick }) {
             <div className="text-end">
               <button
                 className="btn btn-primary"
-                onClick={onClick}
+                onClick={handlePublic}
                 disabled={!isValid}
               >
                 Опубликовать
@@ -49,7 +56,7 @@ NewComment.propTypes = {
   data: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   isValid: PropTypes.bool.isRequired,
-  onChange: PropTypes.func,
-  onClick: PropTypes.func
+  handleChange: PropTypes.func,
+  handlePublic: PropTypes.func
 }
 export default NewComment

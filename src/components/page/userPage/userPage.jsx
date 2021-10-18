@@ -8,6 +8,8 @@ import UserQualities from './userQualities'
 import UserComplitedMeetings from './userComplitedMeetings'
 import NewComment from './newComment'
 import Comment from './comment'
+import { getTimeComment } from '../../../utils/getTimeComment'
+import _ from 'lodash'
 
 const User = () => {
   // деструкторизация входящих пропсов через хук
@@ -37,10 +39,14 @@ const User = () => {
     }
   }
 
+  function sortComments(data) {
+    return _.orderBy(data, 'created_at', 'desc')
+  }
+
   useEffect(() => {
     api.comments.fetchCommentsForUser(userId).then((data) => {
-      setComments(data)
-    })
+      setComments(sortComments(data))
+    }, [])
 
     api.users.getById(userId).then((data) => {
       setUser(data)
@@ -51,10 +57,6 @@ const User = () => {
       setIsLoading(false)
     })
   }, [])
-
-  // useEffect(() => {
-  //   console.log('data ', data)
-  // }, [data])
 
   useEffect(() => {
     validate()
@@ -71,10 +73,9 @@ const User = () => {
   }
 
   const handleDeleteComment = (id) => {
-    console.log('handleDeleteComment', id)
     api.comments.remove(id)
     api.comments.fetchCommentsForUser(userId).then((data) => {
-      setComments(data)
+      setComments(sortComments(data))
     })
   }
 
@@ -90,8 +91,9 @@ const User = () => {
     }
     api.comments.add(newComment)
     api.comments.fetchCommentsForUser(userId).then((data) => {
-      setComments(data)
+      setComments(sortComments(data))
     })
+    // очищаем форму
     setData((prevState) => ({
       ...prevState,
       newCommentUser: '',
@@ -101,10 +103,6 @@ const User = () => {
 
   const getNameUser = (id) => {
     return users.find((user) => user._id === id).name
-  }
-  const getTimeComment = (createTime) => {
-    console.log('create comment time', createTime)
-    return createTime
   }
 
   const renderUsers = () => {
@@ -126,8 +124,8 @@ const User = () => {
                 data={data}
                 errors={errors}
                 isValid={isValid}
-                onChange={handleChange}
-                onClick={handlePublic}
+                handleChange={handleChange}
+                handlePublic={handlePublic}
               />
 
               {comments.length !== 0 && (
@@ -135,51 +133,12 @@ const User = () => {
                   <div className="card-body">
                     <h2>Comments</h2>
                     <hr />
-
                     <Comment
                       comments={comments}
                       getNameUser={getNameUser}
                       getTimeComment={getTimeComment}
-                      onClick={() => handleDeleteComment}
+                      handleDeleteComment={handleDeleteComment}
                     />
-                    {/* {comments.map((comment) => (
-                      <div
-                        key={comment._id}
-                        className="bg-light card-body mb-3"
-                      >
-                        <div className="row">
-                          <div className="col">
-                            <div className="d-flex flex-start">
-                              <Avatar classes="rounded-circle shadow-1-strong me-3" />
-                              <div className="flex-grow-1 flex-shrink-1">
-                                <div className="mb-4">
-                                  <div className="d-flex justify-content-between align-items-center">
-                                    <p className="mb-1">
-                                      {getNameUser(comment.userId)}
-                                      <span className="small">
-                                        &nbsp;-&nbsp;
-                                        {getTimeComment(comment.created_at)}
-                                      </span>
-                                    </p>
-                                    <button
-                                      onClick={() => {
-                                        handleDeleteComment(comment._id)
-                                      }}
-                                      className="btn btn-sm text-primary d-flex align-items-center"
-                                    >
-                                      <i className="bi bi-x-lg"></i>
-                                    </button>
-                                  </div>
-                                  <p className="small mb-0">
-                                    {comment.content}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))} */}
                   </div>
                 </div>
               )}
