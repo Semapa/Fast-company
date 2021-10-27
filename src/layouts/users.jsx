@@ -5,20 +5,21 @@ import UserPage from '../components/page/userPage'
 import UsersListPage from '../components/page/usersListPage'
 
 const Users = () => {
-  const { userId } = useParams()
-  const { edit } = useParams()
+  const { userId, edit } = useParams()
 
-  const renderComponent = () => {
-    if (edit) return <EditDataUser userId={userId} />
-
-    if (userId) {
-      return <UserPage userId={userId} />
-    } else {
-      return <UsersListPage />
-    }
-  }
-
-  return renderComponent()
+  return (
+    <>
+      {userId ? (
+        edit ? (
+          <EditDataUser />
+        ) : (
+          <UserPage userId={userId} />
+        )
+      ) : (
+        <UsersListPage />
+      )}
+    </>
+  )
 }
 
 export default Users

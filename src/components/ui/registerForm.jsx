@@ -131,7 +131,7 @@ const RegisterForm = () => {
             onChange={handleChange}
             name="qualities"
             label="Выберите ваши качества"
-            selected={data.qualities}
+            defaultValue={data.qualities}
           />
         )}
 

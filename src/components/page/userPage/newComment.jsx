@@ -52,7 +52,7 @@ function NewComment({
 }
 
 NewComment.propTypes = {
-  users: PropTypes.oneOf([PropTypes.object, PropTypes.array]).isRequired,
+  users: PropTypes.array.isRequired,
   data: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   isValid: PropTypes.bool.isRequired,

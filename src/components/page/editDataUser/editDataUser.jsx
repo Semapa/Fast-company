@@ -1,70 +1,106 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import api from '../../../api/index'
-import { useHistory } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import { validator } from '../../../utils/validator'
 import Loader from '../../ui/loader/loader'
 import TextField from '../../common/form/textField'
 import SelectField from '../../common/form/selectField'
 import RadioField from '../../common/form/radioField'
 import MultiSelectField from '../../common/form/multiSelectField'
-import _ from 'lodash'
 
-const EditDataUser = ({ userId }) => {
-  const [isLoading, setIsLoading] = useState(true)
-  const [professions, setProfession] = useState([])
-  const [qualities, setQualities] = useState({})
+const EditDataUser = () => {
+  const { userId } = useParams()
+  const history = useHistory()
+
+  const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState({
     name: '',
     email: '',
     profession: '',
-    sex: '',
+    sex: 'male',
     qualities: []
   })
 
+  const [professions, setProfession] = useState([])
+  const [qualities, setQualities] = useState({})
   const [errors, setErrors] = useState({})
-  const history = useHistory()
+
+  const getProfessionsById = (id) => {
+    for (const prof in professions) {
+      const profData = professions[prof]
+      if (profData._id === id) return profData
+    }
+  }
+
+  const getQualities = (elements) => {
+    const qualitiesArray = []
+    for (const elem of elements) {
+      console.log('elem', elem)
+      for (const qualy in qualities) {
+        console.log('qualy', qualy)
+        if (elem.value === qualities[qualy._id]) {
+          qualitiesArray.push(qualities[qualy])
+        }
+      }
+    }
+    console.log(' getQualities', qualitiesArray)
+    return qualitiesArray
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const isValid = validate()
+    if (!isValid) return
+    const { profession, qualities } = data
+    console.log(' handleSubmit data0', data)
+    api.users
+      .update(userId, {
+        ...data,
+        profession: getProfessionsById(profession),
+        qualities: getQualities(qualities)
+      })
+      .then((data) => history.push(`/users/${data._id}`))
+    console.log(' handleSubmit data ', data)
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+    api.users.getById(userId).then(({ profession, ...data }) =>
+      setData((prevState) => ({
+        ...prevState,
+        ...data,
+        profession: profession._id
+      }))
+    )
+    api.professions.fetchAll().then((data) => setProfession(data))
+    api.qualities.fetchAll().then((data) => setQualities(data))
+  }, [])
+
+  useEffect(() => {
+    if (data._id) setIsLoading(false)
+  }, [data])
 
   const validatorConfig = {
-    name: {
-      isRequired: {
-        message: 'Поле "Имя" обязательно для заполнения'
-      }
-    },
     email: {
-      // isRequired: {
-      //   message: 'Электронная почта обязательна для заполнения'
-      // },
+      isRequired: {
+        message: 'Электронная почта обязательна для заполнения'
+      },
       isEmail: {
         message: 'Email введен не корректно'
       }
     },
-    profession: {
+    name: {
       isRequired: {
-        message: 'Обязательно вберите вашу профессию'
+        message: 'Введите ваше имя'
       }
     }
   }
 
-  useEffect(() => {
-    api.professions.fetchAll().then((data) => setProfession(data))
-    api.qualities.fetchAll().then((data) => setQualities(data))
-    api.users.getById(userId).then((data) => {
-      setData((prevState) => ({
-        ...prevState,
-        name: data.name,
-        email: data.email,
-        profession: data.profession._id,
-        sex: data.sex,
-        qualities: data.qualities
-      }))
-      setIsLoading(false)
-    })
-  }, [])
-
-  useEffect(() => {
-    validate()
-  }, [data])
+  useEffect(() => validate(), [data])
+  const handleChange = (target) => {
+    setData((prevState) => ({ ...prevState, [target.name]: target.value }))
+  }
 
   const validate = () => {
     const errors = validator(data, validatorConfig)
@@ -72,26 +108,6 @@ const EditDataUser = ({ userId }) => {
     return Object.keys(errors).length === 0
   }
   const isValid = Object.keys(errors).length === 0
-
-  const handleChange = (target) => {
-    setData((prevState) => ({ ...prevState, [target.name]: target.value }))
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    const currentState = _.clone(data)
-
-    Object.keys(professions).map((item) => {
-      if (professions[item]._id === data.profession) {
-        currentState.profession = professions[item]
-      }
-      return 0
-    })
-
-    api.users.update(userId, currentState)
-    history.push(`/users/${userId}`)
-  }
 
   const handleBack = () => {
     history.push(`/users/${userId}`)
@@ -124,7 +140,7 @@ const EditDataUser = ({ userId }) => {
 
               <SelectField
                 label="Выбери свою профессию"
-                // defaultOption=""
+                defaultOption="Choise..."
                 options={professions}
                 onChange={handleChange}
                 value={data.profession}
@@ -143,11 +159,12 @@ const EditDataUser = ({ userId }) => {
                 label="Выберите ваш пол"
               />
               <MultiSelectField
+                defaultValue={data.qualities}
                 options={qualities}
                 onChange={handleChange}
+                values
                 name="qualities"
                 label="Выберите ваши качества"
-                selected={data.qualities}
               />
               <button
                 type="submit"
@@ -163,11 +180,15 @@ const EditDataUser = ({ userId }) => {
     )
   }
 
-  return <>{isLoading ? <Loader /> : <>{renderFormUser()}</>}</>
-}
-
-EditDataUser.propTypes = {
-  userId: PropTypes.string.isRequired
+  return (
+    <>
+      {!isLoading && Object.keys(professions).length > 0 ? (
+        <>{renderFormUser()}</>
+      ) : (
+        <Loader />
+      )}
+    </>
+  )
 }
 
 export default EditDataUser

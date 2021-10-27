@@ -11,7 +11,6 @@ const SelectField = ({
   name
 }) => {
   const handleChange = ({ target }) => {
-    console.log('target', target)
     onChange({ name: target.name, value: target.value })
   }
 
@@ -25,10 +24,7 @@ const SelectField = ({
           name: options[optionName].name,
           value: options[optionName]._id
         }))
-      : options.map((option) => ({
-          name: option.name,
-          value: option._id
-        }))
+      : options
 
   return (
     <div className="mb-4">
