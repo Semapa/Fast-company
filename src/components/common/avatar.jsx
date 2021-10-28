@@ -20,4 +20,4 @@ Avatar.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string
 }
-export default Avatar
+export default React.memo(Avatar)

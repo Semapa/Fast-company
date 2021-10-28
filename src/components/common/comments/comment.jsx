@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { displayDate } from '../../../utils/displayDate'
 import API from '../../../api'
+import Avatar from '../avatar'
 const Comment = ({
   content,
   created_at: created,
@@ -27,7 +28,8 @@ const Comment = ({
         ) : (
           <div className="col">
             <div className="d-flex flex-start ">
-              <img
+              <Avatar classes="rounded-circle" />
+              {/* <img
                 src={`https://avatars.dicebear.com/api/avataaars/${(
                   Math.random() + 1
                 )
@@ -37,7 +39,7 @@ const Comment = ({
                 alt="avatar"
                 width="65"
                 height="65"
-              />
+              /> */}
               <div className="flex-grow-1 flex-shrink-1">
                 <div className="mb-4">
                   <div className="d-flex justify-content-between align-items-center">

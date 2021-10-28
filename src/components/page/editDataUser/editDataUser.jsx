@@ -36,10 +36,10 @@ const EditDataUser = () => {
   const getQualities = (elements) => {
     const qualitiesArray = []
     for (const elem of elements) {
-      console.log('elem', elem)
+      console.log('elem', elem.value)
       for (const qualy in qualities) {
         console.log('qualy', qualy)
-        if (elem.value === qualities[qualy._id]) {
+        if (elem.value === qualities[qualy]._id) {
           qualitiesArray.push(qualities[qualy])
         }
       }

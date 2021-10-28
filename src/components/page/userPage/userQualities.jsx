@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import Qualities from '../../ui/qualities'
 
 const UserQualities = ({ qualities }) => {
-  console.log('userQualities - qualities', qualities)
   return (
     <div className="card mb-3">
       <div className="card-body d-flex flex-column justify-content-center text-center">

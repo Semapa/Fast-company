@@ -155,13 +155,9 @@ const fetchAll = () =>
   })
 const update = (id, data) =>
   new Promise((resolve) => {
-    console.log('api data', data)
     const users = JSON.parse(localStorage.getItem('users'))
     const userIndex = users.findIndex((u) => u._id === id)
-    console.log('api userIndex', userIndex)
-    console.log('api users0', users[userIndex])
     users[userIndex] = { ...users[userIndex], ...data }
-    console.log('api users', users[userIndex])
     localStorage.setItem('users', JSON.stringify(users))
     resolve(users[userIndex])
   })
