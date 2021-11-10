@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Avatar from '../../common/avatar'
+import Avatar from '../../components/common/avatar'
 import { useHistory } from 'react-router'
 
 const UserInfoCard = ({ user }) => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Qualities from '../../ui/qualities'
+import Qualities from '../../components/ui/qualities'
 
 const UserQualities = ({ qualities }) => {
   return (

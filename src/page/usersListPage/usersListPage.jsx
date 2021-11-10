@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import Pagination from '../../common/pagination'
-import GroupList from '../../common/groupList'
-import SearchStatus from '../../ui/searchStatus'
-import UserTable from '../../ui/usersTable'
-import Loader from '../../ui/loader/loader'
-import TextField from '../../common/form/textField'
-import { paginate } from '../../../utils/paginate'
-import api from '../../../api/index'
+import { useUser } from '../../hooks/useUsers'
+import Pagination from '../../components/common/pagination'
+import GroupList from '../../components/common/groupList'
+import SearchStatus from '../../components/ui/searchStatus'
+import UserTable from '../../components/ui/usersTable'
+import Loader from '../../components/ui/loader/loader'
+import TextField from '../../components/common/form/textField'
+import { paginate } from '../../utils/paginate'
+import api from '../../api/index'
 import _ from 'lodash'
 
 const UsersListPage = () => {
@@ -17,28 +18,24 @@ const UsersListPage = () => {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
 
-  const [users, setUsers] = useState()
-
-  useEffect(() => {
-    api.users.fetchAll().then((data) => {
-      setUsers(data)
-    })
-  }, [])
+  const { users } = useUser()
+  console.log(users)
 
   const handleDelete = (userId) => {
-    setUsers(users.filter((user) => userId !== user._id))
+    // setUsers(users.filter((user) => userId !== user._id))
+    console.log(userId)
   }
 
   const handleToggleBookMark = (id) => {
-    setUsers(
-      users.filter((user) => {
-        if (user._id === id) {
-          user.bookmark = !user.bookmark
-          return user
-        }
+    const newArray = users.filter((user) => {
+      if (user._id === id) {
+        user.bookmark = !user.bookmark
         return user
-      })
-    )
+      }
+      return user
+    })
+    // setUsers(newArray)
+    console.log(newArray)
   }
 
   useEffect(() => {

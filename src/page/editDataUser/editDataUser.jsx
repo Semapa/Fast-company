@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 // import PropTypes from 'prop-types'
-import api from '../../../api/index'
+import api from '../../api/index'
 import { useHistory, useParams } from 'react-router'
-import { validator } from '../../../utils/validator'
-import Loader from '../../ui/loader/loader'
-import TextField from '../../common/form/textField'
-import SelectField from '../../common/form/selectField'
-import RadioField from '../../common/form/radioField'
-import MultiSelectField from '../../common/form/multiSelectField'
+import { validator } from '../../utils/validator'
+import Loader from '../../components/ui/loader/loader'
+import TextField from '../../components/common/form/textField'
+import SelectField from '../../components/common/form/selectField'
+import RadioField from '../../components/common/form/radioField'
+import MultiSelectField from '../../components/common/form/multiSelectField'
 
 const EditDataUser = () => {
   const { userId } = useParams()
