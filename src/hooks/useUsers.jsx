@@ -10,7 +10,7 @@ export const useUser = () => {
   return useContext(UserContext)
 }
 
-const UserProvider = ({ children }) => {
+export const UserProvider = ({ children }) => {
   const [users, setUsers] = useState([])
   const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(null)

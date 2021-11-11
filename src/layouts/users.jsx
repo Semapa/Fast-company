@@ -1,6 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router'
-import UserProvider from '../hooks/useUsers'
+import { UserProvider } from '../hooks/useUsers'
+import { QualitiesProvider } from '../hooks/useQualities'
 import EditDataUser from '../page/editDataUser'
 import UserPage from '../page/userPage'
 import UsersListPage from '../page/usersListPage'
@@ -11,15 +12,17 @@ const Users = () => {
   return (
     <>
       <UserProvider>
-        {userId ? (
-          edit ? (
-            <EditDataUser />
+        <QualitiesProvider>
+          {userId ? (
+            edit ? (
+              <EditDataUser />
+            ) : (
+              <UserPage userId={userId} />
+            )
           ) : (
-            <UserPage userId={userId} />
-          )
-        ) : (
-          <UsersListPage />
-        )}
+            <UsersListPage />
+          )}
+        </QualitiesProvider>
       </UserProvider>
     </>
   )
