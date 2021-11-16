@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useUser } from '../../hooks/useUsers'
+import { useProfessions } from '../../hooks/useProfession'
 import Pagination from '../../components/common/pagination'
 import GroupList from '../../components/common/groupList'
 import SearchStatus from '../../components/ui/searchStatus'
@@ -7,18 +8,20 @@ import UserTable from '../../components/ui/usersTable'
 import Loader from '../../components/ui/loader/loader'
 import TextField from '../../components/common/form/textField'
 import { paginate } from '../../utils/paginate'
-import api from '../../api/index'
+// import api from '../../api/index'
 import _ from 'lodash'
 
 const UsersListPage = () => {
   const pageSize = 8
   const [currentPage, setCurrentPage] = useState(1)
-  const [professions, setProfession] = useState()
+  // const [professions, setProfession] = useState()
   const [selectedProf, setSelectedProf] = useState()
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
 
   const { users } = useUser()
+  const { profession } = useProfessions()
+  const professions = profession
 
   const handleDelete = (userId) => {
     // setUsers(users.filter((user) => userId !== user._id))
@@ -37,9 +40,9 @@ const UsersListPage = () => {
     console.log(newArray)
   }
 
-  useEffect(() => {
-    api.professions.fetchAll().then((data) => setProfession(data))
-  }, [])
+  // useEffect(() => {
+  //   api.professions.fetchAll().then((data) => setProfession(data))
+  // }, [])
 
   useEffect(() => {
     setCurrentPage(1)
@@ -95,7 +98,7 @@ const UsersListPage = () => {
     const filteredUsers = selectedProf
       ? users.filter(
           (user) =>
-            JSON.stringify(user.profession) === JSON.stringify(selectedProf)
+            JSON.stringify(user.profession) === JSON.stringify(selectedProf._id)
         )
       : searchUsers
     const count = filteredUsers.length

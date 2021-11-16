@@ -51,7 +51,6 @@ const UserTable = ({
       )
     }
   }
-
   return (
     <Table>
       <TableHeader {...{ onSort, selectedSort, columns }} />
