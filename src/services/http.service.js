@@ -17,7 +17,7 @@ axios.interceptors.request.use(
       const containSlash = /\/$/gi.test(config.url)
       config.url =
         (containSlash ? config.url.slice(0, -1) : config.url) + '.json'
-      console.log('config.url', config.url)
+      // console.log('config.url', config.url)
     }
     return config
   },
@@ -43,7 +43,6 @@ axios.interceptors.response.use(
     if (configFile.isFireBase) {
       // т.к. в хуке useUsers используем {content} необходимо трансформировать res.data
       res.data = { content: transformData(res.data) }
-      console.log(res.data)
     }
     return res
   },
