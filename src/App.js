@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router'
 import { ToastContainer } from 'react-toastify'
 import NavBar from './components/ui/navBar'
+import AuthProvider from './hooks/useAuth'
 import { ProfessionProvider } from './hooks/useProfession'
 import { QualitiesProvider } from './hooks/useQualities'
 import Login from './layouts/login'
@@ -11,18 +12,20 @@ import LayoutUsers from './layouts/users'
 function App() {
   return (
     <div>
-      <NavBar />
-      <QualitiesProvider>
-        <ProfessionProvider>
-          <Switch>
-            <Route path="/users/:userId?/:edit?" component={LayoutUsers} />
-            <Route path="/login/:type?" component={Login} />
+      <AuthProvider>
+        <NavBar />
+        <QualitiesProvider>
+          <ProfessionProvider>
+            <Switch>
+              <Route path="/users/:userId?/:edit?" component={LayoutUsers} />
+              <Route path="/login/:type?" component={Login} />
 
-            <Route path="/" exact component={LayoutMain} />
-          </Switch>
-        </ProfessionProvider>
-      </QualitiesProvider>
-      <ToastContainer />
+              <Route path="/" exact component={LayoutMain} />
+            </Switch>
+          </ProfessionProvider>
+        </QualitiesProvider>
+        <ToastContainer />
+      </AuthProvider>
     </div>
   )
 }

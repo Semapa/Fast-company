@@ -2,14 +2,19 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import configFile from '../config.json'
 
-// При такой настройке можно убрать основную часть url
-// из методов .get, .put и тд (н.п. editQuality.jsx)
-axios.defaults.baseURL = configFile.apiEndpoint
+// Создаем отдельный экземпляр axios
+// чтобы этот файл не являлся настройкой для глобального axios
+// можно создавать несколько различных инстансов
+const http = axios.create({
+  // При такой настройке можно убрать основную часть url
+  // из методов .get, .put и тд (н.п. editQuality.jsx)
+  baseURL: configFile.apiEndpoint
+})
 
 // Чтобы не менять данные по эндпойнтам, перехватываем здесь
 // изменяем на нужные нам нп profession/ на profession.json
 // или profession/34234 на profession/34234.json
-axios.interceptors.request.use(
+http.interceptors.request.use(
   function (config) {
     // Если используем Firebase? то меняем эндпойнты
     if (configFile.isFireBase) {
@@ -37,7 +42,7 @@ function transformData(data) {
 }
 
 // Перехватчики ошибок при работе с сервером
-axios.interceptors.response.use(
+http.interceptors.response.use(
   (res) => {
     // если это FireBase
     if (configFile.isFireBase) {
@@ -63,10 +68,10 @@ axios.interceptors.response.use(
 )
 
 const httpService = {
-  get: axios.get,
-  post: axios.post,
-  put: axios.put,
-  delete: axios.delete
+  get: http.get,
+  post: http.post,
+  put: http.put,
+  delete: http.delete
 }
 
 export default httpService

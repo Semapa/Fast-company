@@ -7,6 +7,7 @@ import MultiSelectField from '../common/form/multiSelectField'
 import CheckBoxField from '../common/form/checkBoxField'
 import { useQualities } from '../../hooks/useQualities'
 import { useProfessions } from '../../hooks/useProfession'
+import { useAuth } from '../../hooks/useAuth'
 
 const RegisterForm = () => {
   const [data, setData] = useState({
@@ -18,6 +19,7 @@ const RegisterForm = () => {
     license: false
   })
   const [errors, setErrors] = useState({})
+  const { signUp } = useAuth()
 
   const { qualities } = useQualities()
   // Преобразуем качества в требуемый вид для MultiSelectField
@@ -91,6 +93,7 @@ const RegisterForm = () => {
     const newData = { ...data, qualities: data.qualities.map((q) => q.value) }
 
     console.log('data', newData)
+    signUp(newData)
   }
 
   return (
