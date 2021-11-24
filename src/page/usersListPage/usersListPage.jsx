@@ -20,12 +20,11 @@ const UsersListPage = () => {
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
 
   const { users } = useUser()
-  const { profession } = useProfessions()
-  const professions = profession
+  const { professions } = useProfessions()
 
   const handleDelete = (userId) => {
     // setUsers(users.filter((user) => userId !== user._id))
-    console.log(userId)
+    console.log('UsersListPage', userId)
   }
 
   const handleToggleBookMark = (id) => {

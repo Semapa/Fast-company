@@ -24,7 +24,6 @@ const RegisterForm = () => {
   const qualitiesList = qualities.map((q) => ({ label: q.name, value: q._id }))
 
   const { professions } = useProfessions()
-  console.log(professions)
   const professionsList = professions.map((p) => ({
     label: p.name,
     value: p._id
@@ -85,7 +84,7 @@ const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     const isValid = validate()
-    console.log(isValid)
+
     if (!isValid) return
 
     // Трансформируем данные для Firebase
