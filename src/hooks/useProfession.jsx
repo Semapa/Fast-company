@@ -11,7 +11,7 @@ export const useProfessions = () => {
 
 export const ProfessionProvider = ({ children }) => {
   const [isLoading, setLoading] = useState(true)
-  const [profession, setProfession] = useState([])
+  const [professions, setProfessions] = useState([])
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -32,13 +32,13 @@ export const ProfessionProvider = ({ children }) => {
   }
 
   function getProfession(id) {
-    return profession.find((p) => p._id === id)
+    return professions.find((p) => p._id === id)
   }
 
   async function getProfessionsList() {
     try {
       const { content } = await professionService.get()
-      setProfession(content)
+      setProfessions(content)
       setLoading(false)
     } catch (error) {
       errorCatcher(error)
@@ -47,7 +47,7 @@ export const ProfessionProvider = ({ children }) => {
 
   return (
     <ProfessionContext.Provider
-      value={{ profession, isLoading, getProfession }}
+      value={{ professions, isLoading, getProfession }}
     >
       {children}
     </ProfessionContext.Provider>

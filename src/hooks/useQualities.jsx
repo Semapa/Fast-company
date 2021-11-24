@@ -11,7 +11,7 @@ export const useQualities = () => {
 
 export const QualitiesProvider = ({ children }) => {
   const [isLoading, setLoading] = useState(true)
-  const [qualitiesList, setQualitiesList] = useState([])
+  const [qualities, setQualities] = useState([])
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export const QualitiesProvider = ({ children }) => {
   async function getQualitiesList() {
     try {
       const { content } = await qualitiesService.get()
-      setQualitiesList(content)
+      setQualities(content)
       setLoading(false)
     } catch (error) {
       errorCatcher(error)
@@ -42,7 +42,7 @@ export const QualitiesProvider = ({ children }) => {
   }
 
   return (
-    <QualitiesContext.Provider value={{ qualitiesList, isLoading }}>
+    <QualitiesContext.Provider value={{ qualities, isLoading }}>
       {children}
     </QualitiesContext.Provider>
   )
