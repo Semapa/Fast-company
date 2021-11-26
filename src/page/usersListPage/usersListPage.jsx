@@ -21,7 +21,6 @@ const UsersListPage = () => {
 
   const { users } = useUser()
   const { professions } = useProfessions()
-
   const handleDelete = (userId) => {
     // setUsers(users.filter((user) => userId !== user._id))
     console.log('UsersListPage', userId)

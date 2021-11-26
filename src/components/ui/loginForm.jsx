@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react'
 // import { validator } from '../../utils/validator'
 import TextField from '../common/form/textField'
 import CheckBoxField from '../common/form/checkBoxField'
+import { useAuth } from '../../hooks/useAuth'
+import { useHistory } from 'react-router-dom'
 import * as yup from 'yup'
 
 const LoginForm = () => {
   const [data, setData] = useState({ email: '', password: '', stayOn: false })
   const [errors, setErrors] = useState({})
+
+  const history = useHistory()
+  const { signIn } = useAuth()
 
   const validateScheme = yup.object().shape({
     password: yup
@@ -77,12 +82,18 @@ const LoginForm = () => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const isValid = validate()
     console.log(isValid)
     if (!isValid) return
-    console.log('data', data)
+    console.log('loginForm data', data)
+    try {
+      await signIn(data)
+      history.push('/')
+    } catch (error) {
+      setErrors(error)
+    }
   }
 
   return (

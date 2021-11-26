@@ -29,6 +29,7 @@ export const UserProvider = ({ children }) => {
   async function getUsers() {
     try {
       const { content } = await userService.get()
+      console.log('useUsers', content)
       setUsers(content)
       setLoading(false)
     } catch (error) {
