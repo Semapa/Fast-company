@@ -83,7 +83,7 @@ const RegisterForm = () => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const isValid = validate()
 
@@ -91,9 +91,11 @@ const RegisterForm = () => {
 
     // Трансформируем данные для Firebase
     const newData = { ...data, qualities: data.qualities.map((q) => q.value) }
-
-    console.log('data', newData)
-    signUp(newData)
+    try {
+      await signUp(newData)
+    } catch (error) {
+      setErrors(error)
+    }
   }
 
   return (
