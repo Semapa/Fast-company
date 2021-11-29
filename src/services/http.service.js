@@ -33,12 +33,12 @@ http.interceptors.request.use(
 
 function transformData(data) {
   // Проверяем существует ли data, т.к. Firebase в случае ошибки вернет null
-  return data
+  return data && !data._id
     ? Object.keys(data).map((key) => ({
         // в этом месте если необходимо можно добавить id, в нашем случае он есть внутри объекта
         ...data[key]
       }))
-    : []
+    : data
 }
 
 // Перехватчики ошибок при работе с сервером
