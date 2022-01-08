@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import configFile from '../config.json'
+import { httpAuth } from '../hooks/useAuth'
+import localStorageService from './localStorage.service'
 
 // Создаем отдельный экземпляр axios
 // чтобы этот файл не являлся настройкой для глобального axios
@@ -15,7 +17,7 @@ const http = axios.create({
 // изменяем на нужные нам нп profession/ на profession.json
 // или profession/34234 на profession/34234.json
 http.interceptors.request.use(
-  function (config) {
+  async function (config) {
     // Если используем Firebase? то меняем эндпойнты
     if (configFile.isFireBase) {
       // Провверяем есть ли в конце "/"
@@ -23,6 +25,17 @@ http.interceptors.request.use(
       config.url =
         (containSlash ? config.url.slice(0, -1) : config.url) + '.json'
       // console.log('config.url', config.url)
+      const expiresDate = localStorageService.getTokenExpiresDate()
+      const refreshToken = localStorageService.getRefreshToken()
+      console.log('expiresDate ', expiresDate)
+      console.log('refreshToken', refreshToken)
+      if (refreshToken && expiresDate > Date.now()) {
+        const { data } = await httpAuth.post('token', {
+          grand_type: 'refresh_token',
+          refresh_token: refreshToken
+        })
+        console.log(data)
+      }
     }
     return config
   },

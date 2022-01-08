@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router'
 import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import NavBar from './components/ui/navBar'
 import AuthProvider from './hooks/useAuth'
 import { ProfessionProvider } from './hooks/useProfession'
