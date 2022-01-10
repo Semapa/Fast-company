@@ -116,7 +116,6 @@ const AuthProvider = ({ children }) => {
     }
   }, [])
 
-  // TODO toast.error отображается большой внизу
   useEffect(() => {
     if (error !== null && error !== undefined) {
       toast.error(error, {
