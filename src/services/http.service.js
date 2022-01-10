@@ -28,8 +28,8 @@ http.interceptors.request.use(
       // console.log('config.url', config.url)
       const expiresDate = localStorageService.getTokenExpiresDate()
       const refreshToken = localStorageService.getRefreshToken()
-      console.log('expiresDate ', expiresDate)
-      console.log('refreshToken', refreshToken)
+      // console.log('expiresDate ', expiresDate)
+      // console.log('refreshToken', refreshToken)
       // Если есть refresh token
       if (refreshToken && expiresDate < Date.now()) {
         // Возможно тут нужен url: https://securetoken.googleapis.com/v1/token
@@ -44,6 +44,14 @@ http.interceptors.request.use(
           expiresIn: data.expires_in,
           localId: data.user_id
         })
+      }
+
+      // Если юзер авторизован для доступа к защищенным путям
+      // для Firebase нужно модифицировать config
+      const accessToken = localStorageService.getAccessToken()
+      if (accessToken) {
+        // Если есть токен добавляем в query параметры auth
+        config.params = { ...config.params, auth: accessToken }
       }
     }
     return config

@@ -19,6 +19,7 @@ export const QualitiesProvider = ({ children }) => {
   }, [])
 
   function errorCatcher(error) {
+    // console.log('e', error)
     const { message } = error.response.data
     setError(message)
     setLoading(false)

@@ -21,7 +21,9 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (error !== null) {
-      toast.error(error)
+      toast.error(error, {
+        position: toast.POSITION.TOP_RIGHT
+      })
       setError(null)
     }
   }, [error])
@@ -33,7 +35,7 @@ export const UserProvider = ({ children }) => {
       setUsers(content)
       setLoading(false)
     } catch (error) {
-      console.log('useUsers catch', error)
+      // console.log('useUsers catch', error)
       errorCatcher(error)
     }
   }
