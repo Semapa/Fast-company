@@ -90,7 +90,13 @@ const LoginForm = () => {
     console.log('loginForm data', data)
     try {
       await signIn(data)
-      history.push('/')
+      // Сделать переход после авторизации на страницу,
+      // которую пользователь запросил изначально (когда был неавторизованный)
+      history.push(
+        history.location.state.from.pathname
+          ? history.location.state.from.pathname
+          : '/'
+      )
     } catch (error) {
       setErrors(error)
     }
