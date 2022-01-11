@@ -8,6 +8,7 @@ import AuthProvider from './hooks/useAuth'
 import { ProfessionProvider } from './hooks/useProfession'
 import { QualitiesProvider } from './hooks/useQualities'
 import Login from './layouts/login'
+import Logout from './layouts/logout'
 import LayoutMain from './layouts/main'
 import LayoutUsers from './layouts/users'
 
@@ -24,7 +25,7 @@ function App() {
                 component={LayoutUsers}
               />
               <Route path="/login/:type?" component={Login} />
-
+              <Route path="/logout" component={Logout} />
               <Route path="/" exact component={LayoutMain} />
             </Switch>
           </ProfessionProvider>
