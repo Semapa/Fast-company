@@ -55,7 +55,6 @@ export const CommentsProvider = ({ children }) => {
   async function removeComment(id) {
     try {
       const { content } = await commentService.removeComment(id)
-      console.log('useComments removeComment content', content)
       // Если из базы успешно удалился комметнарий
       if (content === null) {
         setComments((prevState) => prevState.filter((c) => c._id !== id))
