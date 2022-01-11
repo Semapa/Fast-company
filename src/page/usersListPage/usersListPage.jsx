@@ -14,7 +14,6 @@ import _ from 'lodash'
 const UsersListPage = () => {
   const pageSize = 8
   const [currentPage, setCurrentPage] = useState(1)
-  // const [professions, setProfession] = useState()
   const [selectedProf, setSelectedProf] = useState()
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
@@ -37,10 +36,6 @@ const UsersListPage = () => {
     // setUsers(newArray)
     console.log(newArray)
   }
-
-  // useEffect(() => {
-  //   api.professions.fetchAll().then((data) => setProfession(data))
-  // }, [])
 
   useEffect(() => {
     setCurrentPage(1)
