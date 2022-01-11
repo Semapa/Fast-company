@@ -93,9 +93,7 @@ const LoginForm = () => {
       // Сделать переход после авторизации на страницу,
       // которую пользователь запросил изначально (когда был неавторизованный)
       history.push(
-        history.location.state.from.pathname
-          ? history.location.state.from.pathname
-          : '/'
+        history.location.state ? history.location.state.from.pathname : '/'
       )
     } catch (error) {
       setErrors(error)
