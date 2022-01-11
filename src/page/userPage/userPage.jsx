@@ -6,6 +6,7 @@ import UserInfoCard from './userInfoCard'
 import UserQualities from './userQualities'
 import UserComplitedMeetings from './userComplitedMeetings'
 import Comments from './comments'
+import { CommentsProvider } from '../../hooks/useComments'
 
 const User = ({ userId }) => {
   const { getUserById } = useUser()
@@ -27,7 +28,9 @@ const User = ({ userId }) => {
             </div>
 
             <div className="col-md-8">
-              <Comments />
+              <CommentsProvider>
+                <Comments />
+              </CommentsProvider>
             </div>
           </div>
         </div>
