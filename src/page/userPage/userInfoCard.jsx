@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Avatar from '../../components/common/avatar'
+// import Avatar from '../../components/common/avatar'
 import { useHistory } from 'react-router'
 
 const UserInfoCard = ({ user }) => {
@@ -18,7 +18,12 @@ const UserInfoCard = ({ user }) => {
           <i className="bi bi-gear"></i>
         </button>
         <div className="d-flex flex-column align-items-center text-center position-relative">
-          <Avatar classes="rounded-circle" width="150" height="150" />
+          <img
+            src={user.image}
+            alt=""
+            height="150"
+            className="img-responsive rounded-circle"
+          />
           <div className="mt-3">
             <h4>{user.name}</h4>
             <p className="text-secondary mb-1">{user.profession.name}</p>

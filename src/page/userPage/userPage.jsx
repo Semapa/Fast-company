@@ -1,7 +1,6 @@
 import React from 'react'
 import { useUser } from '../../hooks/useUsers'
 import PropTypes from 'prop-types'
-// import api from '../../api/index'
 import Loader from '../../components/ui/loader/loader'
 import UserInfoCard from './userInfoCard'
 import UserQualities from './userQualities'
@@ -9,14 +8,10 @@ import UserComplitedMeetings from './userComplitedMeetings'
 import Comments from './comments'
 
 const User = ({ userId }) => {
-  //   const [user, setUser] = useState()
+  const { getUserById } = useUser()
 
-  //   useEffect(() => {
-  //     api.users.getById(userId).then((data) => setUser(data))
-  //   }, [])
-
-  const { users } = useUser()
-  const user = users.find((user) => user._id === userId)
+  const user = getUserById(userId)
+  console.log('userPage user', user)
 
   if (user) {
     return (
