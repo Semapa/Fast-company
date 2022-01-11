@@ -1,22 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-// import Avatar from '../../components/common/avatar'
 import { useHistory } from 'react-router'
+import { useAuth } from '../../hooks/useAuth'
 
 const UserInfoCard = ({ user }) => {
   const history = useHistory()
+  const { currentUser } = useAuth()
   const handleClick = () => {
     history.push(history.location.pathname + '/edit')
   }
   return (
     <div className="card mb-3">
       <div className="card-body">
-        <button
-          onClick={handleClick}
-          className="position-absolute top-0 end-0 btn btn-light btn-sm"
-        >
-          <i className="bi bi-gear"></i>
-        </button>
+        {/* Чтобы отображать кнопку настройки юзера только когда заходишь в свой профиль */}
+        {currentUser._id === user._id && (
+          <button
+            onClick={handleClick}
+            className="position-absolute top-0 end-0 btn btn-light btn-sm"
+          >
+            <i className="bi bi-gear"></i>
+          </button>
+        )}
+
         <div className="d-flex flex-column align-items-center text-center position-relative">
           <img
             src={user.image}

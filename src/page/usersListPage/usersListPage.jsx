@@ -10,6 +10,7 @@ import TextField from '../../components/common/form/textField'
 import { paginate } from '../../utils/paginate'
 // import api from '../../api/index'
 import _ from 'lodash'
+import { useAuth } from '../../hooks/useAuth'
 
 const UsersListPage = () => {
   const pageSize = 8
@@ -19,6 +20,7 @@ const UsersListPage = () => {
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
 
   const { users } = useUser()
+  const { currentUser } = useAuth()
   const { professions } = useProfessions()
   const handleDelete = (userId) => {
     // setUsers(users.filter((user) => userId !== user._id))
@@ -88,14 +90,17 @@ const UsersListPage = () => {
       }
     })
 
-    const filteredUsers = selectedProf
+    let filteredUsers = selectedProf
       ? users.filter(
           (user) =>
             JSON.stringify(user.profession) === JSON.stringify(selectedProf._id)
         )
       : searchUsers
-    const count = filteredUsers.length
 
+    // Чтобы исключить из списка пользователя под которым зашли
+    filteredUsers = filteredUsers.filter((u) => u._id !== currentUser._id)
+
+    const count = filteredUsers.length
     // для фильтрации используем lodash
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order])
 
