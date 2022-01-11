@@ -9,6 +9,17 @@ const commentService = {
       payload
     )
     return data
+  },
+  getComments: async (pageId) => {
+    const { data } = await httpService.get(commentEndpoint, {
+      // для того чтобы сервер отдал комментарии только для определенной страницы
+      // передаем параметры в запрос (в итоге получится строка .../comment.json?orderBy="pageId"&equalTo=pageId)
+      params: {
+        orderBy: '"pageId"',
+        equalTo: `"${pageId}"`
+      }
+    })
+    return data
   }
 }
 
