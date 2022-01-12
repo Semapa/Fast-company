@@ -42,14 +42,16 @@ export const ProfessionProvider = ({ children }) => {
       setLoading(false)
     } catch (error) {
       errorCatcher(error)
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <ProfessionContext.Provider
-      value={{ professions, isLoading, getProfession }}
+      value={{ professions, isLoadingProfession: isLoading, getProfession }}
     >
-      {children}
+      {!isLoading && children}
     </ProfessionContext.Provider>
   )
 }

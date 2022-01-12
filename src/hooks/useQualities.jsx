@@ -39,12 +39,16 @@ export const QualitiesProvider = ({ children }) => {
       setLoading(false)
     } catch (error) {
       errorCatcher(error)
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <QualitiesContext.Provider value={{ qualities, isLoading }}>
-      {children}
+    <QualitiesContext.Provider
+      value={{ qualities, isLoadingQualities: isLoading }}
+    >
+      {!isLoading && children}
     </QualitiesContext.Provider>
   )
 }
