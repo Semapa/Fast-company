@@ -6,6 +6,7 @@ import Quality from './quality'
 const QualitiesList = ({ qualitiesList }) => {
   const { qualities } = useQualities()
 
+  if (!qualitiesList) return <></>
   const qualitiesArray = qualities.reduce((arr, quality) => {
     qualitiesList.forEach((q) => {
       if (quality._id === q) arr.push(quality)
@@ -15,9 +16,8 @@ const QualitiesList = ({ qualitiesList }) => {
 
   return (
     <>
-      {qualitiesArray.map((qual) => (
-        <Quality key={qual._id} {...qual} />
-      ))}
+      {qualitiesArray &&
+        qualitiesArray.map((qual) => <Quality key={qual._id} {...qual} />)}
     </>
   )
 }

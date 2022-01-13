@@ -12,7 +12,6 @@ const User = ({ userId }) => {
   const { getUserById } = useUser()
 
   const user = getUserById(userId)
-  console.log('userPage user', user)
 
   if (user) {
     return (

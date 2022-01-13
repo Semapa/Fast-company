@@ -18,7 +18,7 @@ const EditDataUser = () => {
 
   const [isLoading, setIsLoading] = useState(true)
 
-  const { currentUser, isLoadingUser } = useAuth()
+  const { currentUser, updateUser, isLoadingUser } = useAuth()
   const [errors, setErrors] = useState({})
 
   const { qualities, isLoadingQualities } = useQualities()
@@ -71,19 +71,40 @@ const EditDataUser = () => {
   }, [data])
 
   const getIdQualities = (qualitiesArray) => {
-    return qualitiesArray.map((q) => q.value)
+    console.log('qualitiesArray', qualitiesArray)
+
+    return qualitiesArray.map((q) => {
+      // Если не меняем качества, то они остаются в объекте {_id,color,name}
+      if (q.name) {
+        return q._id
+      } else {
+        // Если меняем качества, то они остаются в объекте {name,value} после трансформации для SelectField
+        return q.value
+      }
+    })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const isValid = validate()
     if (!isValid) return
-    const { profession, qualities } = data
+    const { name, email, profession, qualities } = data
     console.log(' newUser ', {
       ...currentUser,
+      name,
+      email,
       profession,
       qualities: getIdQualities(qualities)
     })
+    updateUser({
+      ...currentUser,
+      name,
+      email,
+      profession,
+      qualities: getIdQualities(qualities)
+    })
+
+    history.push(`/users/${currentUser._id}`)
     // api.users
     //   .update(userId, {
     //     ...data,
