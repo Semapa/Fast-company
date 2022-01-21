@@ -8,10 +8,15 @@ import TextField from '../../components/common/form/textField'
 import SelectField from '../../components/common/form/selectField'
 import RadioField from '../../components/common/form/radioField'
 import MultiSelectField from '../../components/common/form/multiSelectField'
-import { useProfessions } from '../../hooks/useProfession'
+// import { useProfessions } from '../../hooks/useProfession'
 import { useAuth } from '../../hooks/useAuth'
 import { useSelector } from 'react-redux'
 import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities'
+import {
+  getProfessionById,
+  getProfessions,
+  getProfessionsLoadingStatus
+} from '../../store/professions'
 
 const EditDataUser = () => {
   const { userId } = useParams()
@@ -27,7 +32,11 @@ const EditDataUser = () => {
   // Преобразуем качества в требуемый вид для MultiSelectField
   const qualitiesList = qualities.map((q) => ({ label: q.name, value: q._id }))
 
-  const { professions, getProfession, isLoadingProfession } = useProfessions()
+  // const { isLoadingProfession } = useProfessions()
+
+  const professions = useSelector(getProfessions())
+  const profession = useSelector(getProfessionById(currentUser.profession))
+  const isLoadingProfession = useSelector(getProfessionsLoadingStatus())
   // Преобразуем профессии в требуемый вид для Select
   const professionsList = professions.map((p) => ({
     label: p.name,
@@ -54,7 +63,7 @@ const EditDataUser = () => {
         ...prevState,
         name: currentUser.name,
         email: currentUser.email,
-        profession: getProfession(currentUser.profession)._id,
+        profession: profession._id,
         sex: currentUser.sex,
         qualities: getCurrentQulitiesList()
       }))

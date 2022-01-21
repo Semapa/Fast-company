@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useUser } from '../../hooks/useUsers'
-import { useProfessions } from '../../hooks/useProfession'
+// import { useProfessions } from '../../hooks/useProfession'
 import Pagination from '../../components/common/pagination'
 import GroupList from '../../components/common/groupList'
 import SearchStatus from '../../components/ui/searchStatus'
@@ -11,6 +11,8 @@ import { paginate } from '../../utils/paginate'
 // import api from '../../api/index'
 import _ from 'lodash'
 import { useAuth } from '../../hooks/useAuth'
+import { useSelector } from 'react-redux'
+import { getProfessions } from '../../store/professions'
 
 const UsersListPage = () => {
   const pageSize = 8
@@ -21,7 +23,10 @@ const UsersListPage = () => {
 
   const { users } = useUser()
   const { currentUser } = useAuth()
-  const { professions } = useProfessions()
+  // const { professions } = useProfessions()
+
+  const professions = useSelector(getProfessions())
+
   const handleDelete = (userId) => {
     // setUsers(users.filter((user) => userId !== user._id))
     console.log('UsersListPage', userId)

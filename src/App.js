@@ -12,12 +12,14 @@ import Login from './layouts/login'
 import Logout from './layouts/logout'
 import LayoutMain from './layouts/main'
 import LayoutUsers from './layouts/users'
+import { loadProfessionsList } from './store/professions'
 import { loadQualitiesList } from './store/qualities'
 
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(loadQualitiesList())
+    dispatch(loadProfessionsList())
   }, [])
   return (
     <div>
