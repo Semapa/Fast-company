@@ -9,8 +9,9 @@ import SelectField from '../../components/common/form/selectField'
 import RadioField from '../../components/common/form/radioField'
 import MultiSelectField from '../../components/common/form/multiSelectField'
 import { useProfessions } from '../../hooks/useProfession'
-import { useQualities } from '../../hooks/useQualities'
 import { useAuth } from '../../hooks/useAuth'
+import { useSelector } from 'react-redux'
+import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities'
 
 const EditDataUser = () => {
   const { userId } = useParams()
@@ -21,7 +22,8 @@ const EditDataUser = () => {
   const { currentUser, updateUser, isLoadingUser } = useAuth()
   const [errors, setErrors] = useState({})
 
-  const { qualities, isLoadingQualities } = useQualities()
+  const qualities = useSelector(getQualities())
+  const isLoadingQualities = useSelector(getQualitiesLoadingStatus())
   // Преобразуем качества в требуемый вид для MultiSelectField
   const qualitiesList = qualities.map((q) => ({ label: q.name, value: q._id }))
 
