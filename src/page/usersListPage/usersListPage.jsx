@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useUser } from '../../hooks/useUsers'
 // import { useProfessions } from '../../hooks/useProfession'
 import Pagination from '../../components/common/pagination'
 import GroupList from '../../components/common/groupList'
@@ -13,6 +12,7 @@ import _ from 'lodash'
 import { useAuth } from '../../hooks/useAuth'
 import { useSelector } from 'react-redux'
 import { getProfessions } from '../../store/professions'
+import { getUsersList } from '../../store/users'
 
 const UsersListPage = () => {
   const pageSize = 8
@@ -21,10 +21,10 @@ const UsersListPage = () => {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
 
-  const { users } = useUser()
   const { currentUser } = useAuth()
   // const { professions } = useProfessions()
 
+  const users = useSelector(getUsersList())
   const professions = useSelector(getProfessions())
 
   const handleDelete = (userId) => {
