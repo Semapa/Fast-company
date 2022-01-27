@@ -10,23 +10,26 @@ import RadioField from '../../components/common/form/radioField'
 import MultiSelectField from '../../components/common/form/multiSelectField'
 // import { useProfessions } from '../../hooks/useProfession'
 import { useAuth } from '../../hooks/useAuth'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities'
 import {
   getProfessionById,
   getProfessions,
   getProfessionsLoadingStatus
 } from '../../store/professions'
-import { getCurrentUserData } from '../../store/users'
+import { getCurrentUserData, updateUserData } from '../../store/users'
 
 const EditDataUser = () => {
+  const dispatch = useDispatch()
   const { userId } = useParams()
   const history = useHistory()
 
   const [isLoading, setIsLoading] = useState(true)
   const currentUser = useSelector(getCurrentUserData())
 
-  const { updateUser, isLoadingUser } = useAuth()
+  const { isLoadingUser } = useAuth()
+  // const updateUser = useSelector(updateUserData())
+
   const [errors, setErrors] = useState({})
 
   const qualities = useSelector(getQualities())
@@ -72,7 +75,7 @@ const EditDataUser = () => {
     }
   }, [])
 
-  console.log('currentUser', currentUser)
+  // console.log('currentUser', currentUser)
   // console.log('professions', professions)
   // console.log('qualities', qualities)
 
@@ -84,7 +87,7 @@ const EditDataUser = () => {
   }, [data])
 
   const getIdQualities = (qualitiesArray) => {
-    console.log('qualitiesArray', qualitiesArray)
+    // console.log('qualitiesArray', qualitiesArray)
 
     return qualitiesArray.map((q) => {
       // Если не меняем качества, то они остаются в объекте {_id,color,name}
@@ -102,30 +105,23 @@ const EditDataUser = () => {
     const isValid = validate()
     if (!isValid) return
     const { name, email, profession, qualities } = data
-    console.log(' newUser ', {
-      ...currentUser,
-      name,
-      email,
-      profession,
-      qualities: getIdQualities(qualities)
-    })
-    updateUser({
-      ...currentUser,
-      name,
-      email,
-      profession,
-      qualities: getIdQualities(qualities)
-    })
+    // console.log(' newUser ', {
+    //   ...currentUser,
+    //   name,
+    //   email,
+    //   profession,
+    //   qualities: getIdQualities(qualities)
+    // })
 
-    history.push(`/users/${currentUser._id}`)
-    // api.users
-    //   .update(userId, {
-    //     ...data,
-    //     profession: getProfessionsById(profession),
-    //     qualities: getQualities(qualities)
-    //   })
-    //   .then((data) => history.push(`/users/${data._id}`))
-    // console.log(' handleSubmit data ', data)
+    dispatch(
+      updateUserData({
+        ...currentUser,
+        name,
+        email,
+        profession,
+        qualities: getIdQualities(qualities)
+      })
+    )
   }
 
   const validatorConfig = {
