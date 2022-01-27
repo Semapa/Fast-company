@@ -4,13 +4,14 @@ import TextField from '../common/form/textField'
 import CheckBoxField from '../common/form/checkBoxField'
 import { useHistory } from 'react-router-dom'
 import * as yup from 'yup'
-import { useDispatch } from 'react-redux'
-import { login } from '../../store/users'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAuthErrors, login } from '../../store/users'
 
 const LoginForm = () => {
   const [data, setData] = useState({ email: '', password: '', stayOn: false })
   const [errors, setErrors] = useState({})
 
+  const loginError = useSelector(getAuthErrors())
   const history = useHistory()
   const dispatch = useDispatch()
 
@@ -123,6 +124,7 @@ const LoginForm = () => {
         >
           Оставаться в системе
         </CheckBoxField>
+        {loginError && <p className="text-danger">{loginError}</p>}
         <button
           type="submit"
           disabled={!isValid}
