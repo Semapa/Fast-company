@@ -2,8 +2,6 @@ import React from 'react'
 // import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import UsersLoader from '../components/ui/hoc/usersLoader'
-import { UserProvider } from '../hooks/useUsers'
-
 import EditDataUser from '../page/editDataUser'
 import UserPage from '../page/userPage'
 import UsersListPage from '../page/usersListPage'
@@ -15,17 +13,15 @@ const Users = () => {
   return (
     <>
       <UsersLoader>
-        <UserProvider>
-          {userId ? (
-            edit ? (
-              <EditDataUser />
-            ) : (
-              <UserPage userId={userId} />
-            )
+        {userId ? (
+          edit ? (
+            <EditDataUser />
           ) : (
-            <UsersListPage />
-          )}
-        </UserProvider>
+            <UserPage userId={userId} />
+          )
+        ) : (
+          <UsersListPage />
+        )}
       </UsersLoader>
     </>
   )
