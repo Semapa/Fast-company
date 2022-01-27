@@ -9,10 +9,9 @@ import TextField from '../../components/common/form/textField'
 import { paginate } from '../../utils/paginate'
 // import api from '../../api/index'
 import _ from 'lodash'
-import { useAuth } from '../../hooks/useAuth'
 import { useSelector } from 'react-redux'
 import { getProfessions } from '../../store/professions'
-import { getUsersList } from '../../store/users'
+import { getCurrentUserId, getUsersList } from '../../store/users'
 
 const UsersListPage = () => {
   const pageSize = 8
@@ -21,7 +20,7 @@ const UsersListPage = () => {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
 
-  const { currentUser } = useAuth()
+  const currentUserId = useSelector(getCurrentUserId())
   // const { professions } = useProfessions()
 
   const users = useSelector(getUsersList())
@@ -103,7 +102,7 @@ const UsersListPage = () => {
       : searchUsers
 
     // Чтобы исключить из списка пользователя под которым зашли
-    filteredUsers = filteredUsers.filter((u) => u._id !== currentUser._id)
+    filteredUsers = filteredUsers.filter((u) => u._id !== currentUserId)
 
     const count = filteredUsers.length
     // для фильтрации используем lodash
