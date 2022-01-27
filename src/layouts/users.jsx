@@ -1,38 +1,32 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React from 'react'
+// import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
-import Loader from '../components/ui/loader/loader'
+import UsersLoader from '../components/ui/hoc/usersLoader'
 import { UserProvider } from '../hooks/useUsers'
 
 import EditDataUser from '../page/editDataUser'
 import UserPage from '../page/userPage'
 import UsersListPage from '../page/usersListPage'
-import { getDataStatus, loadUsersList } from '../store/users'
 
 const Users = () => {
   const { userId, edit } = useParams()
-  const dataStatus = useSelector(getDataStatus())
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (!dataStatus) dispatch(loadUsersList())
-  }, [])
-
-  if (!dataStatus) return <Loader />
+  // const currentUserId = useSelector(getCurrentUserId())
 
   return (
     <>
-      <UserProvider>
-        {userId ? (
-          edit ? (
-            <EditDataUser />
+      <UsersLoader>
+        <UserProvider>
+          {userId ? (
+            edit ? (
+              <EditDataUser />
+            ) : (
+              <UserPage userId={userId} />
+            )
           ) : (
-            <UserPage userId={userId} />
-          )
-        ) : (
-          <UsersListPage />
-        )}
-      </UserProvider>
+            <UsersListPage />
+          )}
+        </UserProvider>
+      </UsersLoader>
     </>
   )
 }
