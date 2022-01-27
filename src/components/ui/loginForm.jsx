@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react'
 // import { validator } from '../../utils/validator'
 import TextField from '../common/form/textField'
 import CheckBoxField from '../common/form/checkBoxField'
-import { useAuth } from '../../hooks/useAuth'
 import { useHistory } from 'react-router-dom'
 import * as yup from 'yup'
+import { useDispatch } from 'react-redux'
+import { login } from '../../store/users'
 
 const LoginForm = () => {
   const [data, setData] = useState({ email: '', password: '', stayOn: false })
   const [errors, setErrors] = useState({})
 
   const history = useHistory()
-  const { signIn } = useAuth()
+  const dispatch = useDispatch()
 
   const validateScheme = yup.object().shape({
     password: yup
@@ -82,22 +83,19 @@ const LoginForm = () => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     const isValid = validate()
     console.log(isValid)
     if (!isValid) return
+    // Сделать переход после авторизации на страницу,
+    // которую пользователь запросил изначально (когда был неавторизованный)
+    const redirect = history.location.state
+      ? history.location.state.from.pathname
+      : '/'
     console.log('loginForm data', data)
-    try {
-      await signIn(data)
-      // Сделать переход после авторизации на страницу,
-      // которую пользователь запросил изначально (когда был неавторизованный)
-      history.push(
-        history.location.state ? history.location.state.from.pathname : '/'
-      )
-    } catch (error) {
-      setErrors(error)
-    }
+
+    dispatch(login({ payload: data, redirect }))
   }
 
   return (
