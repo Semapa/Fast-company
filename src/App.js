@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import ProtectedRoute from './components/common/protectedRoute'
 import AppLoader from './components/ui/hoc/appLoader'
 import NavBar from './components/ui/navBar'
-import AuthProvider from './hooks/useAuth'
 import { ProfessionProvider } from './hooks/useProfession'
 import { QualitiesProvider } from './hooks/useQualities'
 import Login from './layouts/login'
@@ -17,23 +16,21 @@ function App() {
   return (
     <div>
       <AppLoader>
-        <AuthProvider>
-          <NavBar />
-          <QualitiesProvider>
-            <ProfessionProvider>
-              <Switch>
-                <ProtectedRoute
-                  path="/users/:userId?/:edit?"
-                  component={LayoutUsers}
-                />
-                <Route path="/login/:type?" component={Login} />
-                <Route path="/logout" component={Logout} />
-                <Route path="/" exact component={LayoutMain} />
-              </Switch>
-            </ProfessionProvider>
-          </QualitiesProvider>
-          <ToastContainer />
-        </AuthProvider>
+        <NavBar />
+        <QualitiesProvider>
+          <ProfessionProvider>
+            <Switch>
+              <ProtectedRoute
+                path="/users/:userId?/:edit?"
+                component={LayoutUsers}
+              />
+              <Route path="/login/:type?" component={Login} />
+              <Route path="/logout" component={Logout} />
+              <Route path="/" exact component={LayoutMain} />
+            </Switch>
+          </ProfessionProvider>
+        </QualitiesProvider>
+        <ToastContainer />
       </AppLoader>
     </div>
   )

@@ -9,7 +9,6 @@ import SelectField from '../../components/common/form/selectField'
 import RadioField from '../../components/common/form/radioField'
 import MultiSelectField from '../../components/common/form/multiSelectField'
 // import { useProfessions } from '../../hooks/useProfession'
-import { useAuth } from '../../hooks/useAuth'
 import { useSelector, useDispatch } from 'react-redux'
 import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities'
 import {
@@ -17,7 +16,11 @@ import {
   getProfessions,
   getProfessionsLoadingStatus
 } from '../../store/professions'
-import { getCurrentUserData, updateUserData } from '../../store/users'
+import {
+  getCurrentUserData,
+  updateUserData,
+  getUsersLoadingStatus
+} from '../../store/users'
 
 const EditDataUser = () => {
   const dispatch = useDispatch()
@@ -27,11 +30,12 @@ const EditDataUser = () => {
   const [isLoading, setIsLoading] = useState(true)
   const currentUser = useSelector(getCurrentUserData())
 
-  const { isLoadingUser } = useAuth()
+  // const { isLoadingUser } = useAuth()
   // const updateUser = useSelector(updateUserData())
 
   const [errors, setErrors] = useState({})
 
+  const isLoadingUser = useSelector(getUsersLoadingStatus())
   const qualities = useSelector(getQualities())
   const isLoadingQualities = useSelector(getQualitiesLoadingStatus())
   // Преобразуем качества в требуемый вид для MultiSelectField
