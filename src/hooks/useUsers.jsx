@@ -35,17 +35,14 @@ export const UserProvider = ({ children }) => {
   async function getUsers() {
     try {
       const { content } = await userService.get()
-      console.log('useUsers content', content)
       setUsers(content)
       setLoading(false)
     } catch (error) {
-      // console.log('useUsers catch', error)
       errorCatcher(error)
     }
   }
 
   function errorCatcher(error) {
-    console.log('useUsers error', error)
     const { message } = error.response.data
     setError(message)
     setLoading(false)

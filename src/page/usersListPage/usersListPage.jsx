@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useUser } from '../../hooks/useUsers'
-import { useProfessions } from '../../hooks/useProfession'
+// import { useProfessions } from '../../hooks/useProfession'
 import Pagination from '../../components/common/pagination'
 import GroupList from '../../components/common/groupList'
 import SearchStatus from '../../components/ui/searchStatus'
@@ -10,7 +9,9 @@ import TextField from '../../components/common/form/textField'
 import { paginate } from '../../utils/paginate'
 // import api from '../../api/index'
 import _ from 'lodash'
-import { useAuth } from '../../hooks/useAuth'
+import { useSelector } from 'react-redux'
+import { getProfessions } from '../../store/professions'
+import { getCurrentUserId, getUsersList } from '../../store/users'
 
 const UsersListPage = () => {
   const pageSize = 8
@@ -19,9 +20,12 @@ const UsersListPage = () => {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
 
-  const { users } = useUser()
-  const { currentUser } = useAuth()
-  const { professions } = useProfessions()
+  const currentUserId = useSelector(getCurrentUserId())
+  // const { professions } = useProfessions()
+
+  const users = useSelector(getUsersList())
+  const professions = useSelector(getProfessions())
+
   const handleDelete = (userId) => {
     // setUsers(users.filter((user) => userId !== user._id))
     console.log('UsersListPage', userId)
@@ -98,7 +102,7 @@ const UsersListPage = () => {
       : searchUsers
 
     // Чтобы исключить из списка пользователя под которым зашли
-    filteredUsers = filteredUsers.filter((u) => u._id !== currentUser._id)
+    filteredUsers = filteredUsers.filter((u) => u._id !== currentUserId)
 
     const count = filteredUsers.length
     // для фильтрации используем lodash

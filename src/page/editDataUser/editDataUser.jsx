@@ -8,24 +8,44 @@ import TextField from '../../components/common/form/textField'
 import SelectField from '../../components/common/form/selectField'
 import RadioField from '../../components/common/form/radioField'
 import MultiSelectField from '../../components/common/form/multiSelectField'
-import { useProfessions } from '../../hooks/useProfession'
-import { useQualities } from '../../hooks/useQualities'
-import { useAuth } from '../../hooks/useAuth'
+// import { useProfessions } from '../../hooks/useProfession'
+import { useSelector, useDispatch } from 'react-redux'
+import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities'
+import {
+  getProfessionById,
+  getProfessions,
+  getProfessionsLoadingStatus
+} from '../../store/professions'
+import {
+  getCurrentUserData,
+  updateUserData,
+  getUsersLoadingStatus
+} from '../../store/users'
 
 const EditDataUser = () => {
+  const dispatch = useDispatch()
   const { userId } = useParams()
   const history = useHistory()
 
   const [isLoading, setIsLoading] = useState(true)
+  const currentUser = useSelector(getCurrentUserData())
 
-  const { currentUser, updateUser, isLoadingUser } = useAuth()
+  // const { isLoadingUser } = useAuth()
+  // const updateUser = useSelector(updateUserData())
+
   const [errors, setErrors] = useState({})
 
-  const { qualities, isLoadingQualities } = useQualities()
+  const isLoadingUser = useSelector(getUsersLoadingStatus())
+  const qualities = useSelector(getQualities())
+  const isLoadingQualities = useSelector(getQualitiesLoadingStatus())
   // Преобразуем качества в требуемый вид для MultiSelectField
   const qualitiesList = qualities.map((q) => ({ label: q.name, value: q._id }))
 
-  const { professions, getProfession, isLoadingProfession } = useProfessions()
+  // const { isLoadingProfession } = useProfessions()
+
+  const professions = useSelector(getProfessions())
+  const profession = useSelector(getProfessionById(currentUser.profession))
+  const isLoadingProfession = useSelector(getProfessionsLoadingStatus())
   // Преобразуем профессии в требуемый вид для Select
   const professionsList = professions.map((p) => ({
     label: p.name,
@@ -52,14 +72,14 @@ const EditDataUser = () => {
         ...prevState,
         name: currentUser.name,
         email: currentUser.email,
-        profession: getProfession(currentUser.profession)._id,
+        profession: profession._id,
         sex: currentUser.sex,
         qualities: getCurrentQulitiesList()
       }))
     }
   }, [])
 
-  console.log('currentUser', currentUser)
+  // console.log('currentUser', currentUser)
   // console.log('professions', professions)
   // console.log('qualities', qualities)
 
@@ -71,7 +91,7 @@ const EditDataUser = () => {
   }, [data])
 
   const getIdQualities = (qualitiesArray) => {
-    console.log('qualitiesArray', qualitiesArray)
+    // console.log('qualitiesArray', qualitiesArray)
 
     return qualitiesArray.map((q) => {
       // Если не меняем качества, то они остаются в объекте {_id,color,name}
@@ -89,30 +109,23 @@ const EditDataUser = () => {
     const isValid = validate()
     if (!isValid) return
     const { name, email, profession, qualities } = data
-    console.log(' newUser ', {
-      ...currentUser,
-      name,
-      email,
-      profession,
-      qualities: getIdQualities(qualities)
-    })
-    updateUser({
-      ...currentUser,
-      name,
-      email,
-      profession,
-      qualities: getIdQualities(qualities)
-    })
+    // console.log(' newUser ', {
+    //   ...currentUser,
+    //   name,
+    //   email,
+    //   profession,
+    //   qualities: getIdQualities(qualities)
+    // })
 
-    history.push(`/users/${currentUser._id}`)
-    // api.users
-    //   .update(userId, {
-    //     ...data,
-    //     profession: getProfessionsById(profession),
-    //     qualities: getQualities(qualities)
-    //   })
-    //   .then((data) => history.push(`/users/${data._id}`))
-    // console.log(' handleSubmit data ', data)
+    dispatch(
+      updateUserData({
+        ...currentUser,
+        name,
+        email,
+        profession,
+        qualities: getIdQualities(qualities)
+      })
+    )
   }
 
   const validatorConfig = {

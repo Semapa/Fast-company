@@ -1,17 +1,18 @@
 import React from 'react'
+// import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
-import { UserProvider } from '../hooks/useUsers'
-
+import UsersLoader from '../components/ui/hoc/usersLoader'
 import EditDataUser from '../page/editDataUser'
 import UserPage from '../page/userPage'
 import UsersListPage from '../page/usersListPage'
 
 const Users = () => {
   const { userId, edit } = useParams()
+  // const currentUserId = useSelector(getCurrentUserId())
 
   return (
     <>
-      <UserProvider>
+      <UsersLoader>
         {userId ? (
           edit ? (
             <EditDataUser />
@@ -21,7 +22,7 @@ const Users = () => {
         ) : (
           <UsersListPage />
         )}
-      </UserProvider>
+      </UsersLoader>
     </>
   )
 }

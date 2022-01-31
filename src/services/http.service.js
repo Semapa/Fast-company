@@ -2,7 +2,8 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 // import { date } from 'yup/lib/locale'
 import configFile from '../config.json'
-import { httpAuth } from '../hooks/useAuth'
+import authService from './auth.service'
+
 import localStorageService from './localStorage.service'
 
 // Создаем отдельный экземпляр axios
@@ -33,10 +34,7 @@ http.interceptors.request.use(
       // Если есть refresh token
       if (refreshToken && expiresDate < Date.now()) {
         // Возможно тут нужен url: https://securetoken.googleapis.com/v1/token
-        const { data } = await httpAuth.post('token', {
-          grant_type: 'refresh_token',
-          refresh_token: refreshToken
-        })
+        const data = await authService.refresh()
         // console.log(data)
         localStorageService.setTokens({
           refreshToken: data.refresh_token,
