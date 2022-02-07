@@ -1,3 +1,4 @@
 {
-  "port": 8080
+  "port": 8080,
+  "mongoUri": "mongodb+srv://Semapa:Semapa-12345Test@cluster0.uclc3.mongodb.net/fast-company?retryWrites=true&w=majority"
 }
