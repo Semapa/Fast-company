@@ -3,12 +3,11 @@ const mongoose = require('mongoose')
 const config = require('config')
 const chalk = require('chalk')
 const cors = require('cors')
+const path = require('path')
 const initDatabase = require('./startUp/initDatabase')
 const routes = require('./routes')
 
 const app = express()
-
-const PORT = config.get('port') ?? 8080
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -17,11 +16,22 @@ app.use(cors())
 // все роуты на которые будет реагировать приложения будут начинаться /api
 app.use('/api', routes)
 
-// if (process.env.NODE_ENV === 'production') {
-//   console.log('Production')
-// } else {
-//   console.log('Development')
-// }
+const PORT = config.get('port') ?? 8080
+
+if (process.env.NODE_ENV === 'production') {
+  // Если продакшн, отдаем статическую папку build
+  app.use('/', express.static(path.join(__dirname, 'client')))
+
+  const indexPath = path.join(__dirname, 'client', 'index.html')
+
+  // Если до этого не сработали запросы по api
+  app.get('*', (req, res) => {
+    res.sendFile(indexPath)
+  })
+  // console.log('Production')
+} else {
+  console.log('Development')
+}
 
 async function start() {
   try {
