@@ -72,6 +72,9 @@ const RegisterForm = () => {
       min: {
         message: 'Пароль должен состоять минимум из 8 символов',
         value: 8
+      },
+      isContainЫpecialСharacter: {
+        message: 'Пароль должен содержать один из специальных символов !@#$%^&*'
       }
     },
     profession: {

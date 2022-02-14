@@ -20,19 +20,21 @@ const http = axios.create({
 // или profession/34234 на profession/34234.json
 http.interceptors.request.use(
   async function (config) {
+    const expiresDate = localStorageService.getTokenExpiresDate()
+    const refreshToken = localStorageService.getRefreshToken()
+    const isExpired = refreshToken && expiresDate < Date.now()
+
     // Если используем Firebase? то меняем эндпойнты
     if (configFile.isFireBase) {
       // Провверяем есть ли в конце "/"
       const containSlash = /\/$/gi.test(config.url)
       config.url =
         (containSlash ? config.url.slice(0, -1) : config.url) + '.json'
-      // console.log('config.url', config.url)
-      const expiresDate = localStorageService.getTokenExpiresDate()
-      const refreshToken = localStorageService.getRefreshToken()
+
       // console.log('expiresDate ', expiresDate)
       // console.log('refreshToken', refreshToken)
       // Если есть refresh token
-      if (refreshToken && expiresDate < Date.now()) {
+      if (isExpired) {
         // Возможно тут нужен url: https://securetoken.googleapis.com/v1/token
         const data = await authService.refresh()
         // console.log(data)
@@ -50,6 +52,25 @@ http.interceptors.request.use(
       if (accessToken) {
         // Если есть токен добавляем в query параметры auth
         config.params = { ...config.params, auth: accessToken }
+      }
+    } else {
+      // Если есть refresh token
+      if (isExpired) {
+        // Возможно тут нужен url: https://securetoken.googleapis.com/v1/token
+        const data = await authService.refresh()
+        // Так как ключ значения одинаковые, то просто data
+        localStorageService.setTokens({ data })
+      }
+
+      // Если юзер авторизован для доступа к защищенным путям
+      // для Firebase нужно модифицировать config
+      const accessToken = localStorageService.getAccessToken()
+      if (accessToken) {
+        // Если есть токен добавляем в query параметры auth
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${accessToken}`
+        }
       }
     }
     return config
@@ -77,6 +98,7 @@ http.interceptors.response.use(
       // т.к. в хуке useUsers используем {content} необходимо трансформировать res.data
       res.data = { content: transformData(res.data) }
     }
+    res.data = { content: res.data }
     return res
   },
   function (error) {

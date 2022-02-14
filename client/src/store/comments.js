@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import commentService from '../services/comment.service'
-import { nanoid } from 'nanoid'
 
 const commentsSlice = createSlice({
   name: 'comments',
@@ -41,30 +40,21 @@ const {
   commentRemoved
 } = actions
 
-export const createComment =
-  (data, userId, currentUserId) => async (dispatch) => {
-    // dispatch(commentsRequested())
-    try {
-      const comment = {
-        ...data,
-        _id: nanoid(),
-        pageId: userId,
-        created_at: Date.now(),
-        userId: currentUserId
-      }
-
-      const { content } = await commentService.createComment(comment)
-      dispatch(commentsRequested())
-      dispatch(commentsUpdated(content))
-    } catch (error) {
-      dispatch(commentsRequestFiled(error.message))
-    }
+export const createComment = (payload) => async (dispatch) => {
+  // dispatch(commentsRequested())
+  try {
+    const { content } = await commentService.createComment({ ...payload })
+    dispatch(commentsRequested())
+    dispatch(commentsUpdated(content))
+  } catch (error) {
+    dispatch(commentsRequestFiled(error.message))
   }
+}
 
 export const removeComment = (id) => async (dispatch) => {
   try {
     const { content } = await commentService.removeComment(id)
-    if (content === null) {
+    if (!content) {
       dispatch(commentsRequested())
       dispatch(commentRemoved(id))
     }

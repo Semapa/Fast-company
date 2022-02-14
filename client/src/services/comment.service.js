@@ -4,10 +4,8 @@ const commentEndpoint = 'comment/'
 
 const commentService = {
   createComment: async (payload) => {
-    const { data } = await httpService.put(
-      commentEndpoint + payload._id,
-      payload
-    )
+    console.log('createComment', payload)
+    const { data } = await httpService.post(commentEndpoint, payload)
     return data
   },
   getComments: async (pageId) => {
@@ -15,8 +13,8 @@ const commentService = {
       // для того чтобы сервер отдал комментарии только для определенной страницы
       // передаем параметры в запрос (в итоге получится строка .../comment.json?orderBy="pageId"&equalTo=pageId)
       params: {
-        orderBy: '"pageId"',
-        equalTo: `"${pageId}"`
+        orderBy: 'pageId',
+        equalTo: `${pageId}`
       }
     })
     return data

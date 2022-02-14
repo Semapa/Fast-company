@@ -23,7 +23,7 @@ router
     try {
       const newComment = await Comment.create({
         ...req.body,
-        userId: req.user._id
+        pageId: req.body.currentUserId
       })
       res.status(201).send(newComment)
     } catch (error) {
