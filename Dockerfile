@@ -1,5 +1,5 @@
 # инструкции для клиента указываем какую платформу используем
-FROM node:14 as client
+FROM node:16 as client
 
 # указываем рабочий каталог
 WORKDIR /app/client
@@ -17,7 +17,7 @@ COPY client /app/client/
 RUN npm run build
 
 # инструкции для сервера используем последнюю версию alpine
-FROM node:16-alpine
+FROM node:16
 
 WORKDIR /app
 
